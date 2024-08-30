@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+/* Override default styles for dark mode */
+@layer base {
+  body {
+    @apply bg-gray-900 text-gray-100;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-gray-100;
+  }
+
+  a {
+    @apply text-blue-400 hover:text-blue-300;
+  }
+
+  button {
+    @apply bg-gray-800 text-gray-100 hover:bg-gray-700;
+  }
+
+  input, textarea {
+    @apply bg-gray-800 text-gray-100 border-gray-700;
+  }
+}
+
+/* Custom dark mode styles */
+@layer components {
+  .card {
+    @apply bg-gray-800 border-gray-700;
+  }
+
+  .navbar {
+    @apply bg-gray-800 border-gray-700;
+  }
+
+  .footer {
+    @apply bg-gray-800 border-t border-gray-700;
+  }
+}
+
+/* Utility classes for dark mode */
+@layer utilities {
+  .dark-hover:hover {
+    @apply bg-gray-700;
+  }
+
+  .dark-focus:focus {
+    @apply ring-2 ring-blue-500;
+  }
+}

@@ -1,0 +1,150 @@
+"use client"
+
+import Image from "next/image";
+// pages/index.tsx
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { EventSourcePolyfill } from 'event-source-polyfill';
+
+export default function Home(){
+  const [models, setModels] = useState<string[]>([]);
+  const [selectedModel, setSelectedModel] = useState('us_journalism');
+  const [prompt, setPrompt] = useState('');
+  const [output, setOutput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [resultUrl, setResultUrl] = useState('');
+  const [status, setStatus] = useState('')
+  
+  useEffect(() => {
+    fetchModels();
+  }, []);
+
+  const fetchModels = async () => {
+    try {
+      const response = await axios.get('http://localhost:1207/api/models');
+      setModels(response.data);
+    } catch (error) {
+      console.error('Error fetching models:', error);
+    }
+  };
+  const handleControlMessage = (ssePayload) => {
+     if (ssePayload.startsWith("@@status"))
+      setStatus(ssePayload.split(' ')[1]) 
+     else if (ssePayload.startsWith("@@debug"))
+      //console.log(ssePayload)
+  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setOutput('')
+    setResultUrl('');
+
+    const eventSource = new EventSourcePolyfill(`http://localhost:1207/api/run-pipeline?model=${selectedModel}&prompt=${encodeURIComponent(prompt)}`, {
+      headers: {
+        'Content-Type': 'text/event-stream',
+      },
+    });
+
+    eventSource.onmessage = (event) => {
+      if (event.data.startsWith("@@")) {
+        handleControlMessage(event.data)
+        return false; //don't update the UI 
+      }
+      setOutput((prevOutput) => prevOutput + event.data);
+    };
+
+    eventSource.onerror = (error) => {
+      console.error('EventSource failed:', error);
+      eventSource.close();
+      setIsLoading(false);
+    };
+
+    eventSource.addEventListener('complete', (event: any) => {
+      setResultUrl(event.data);
+      setIsLoading(false);
+      eventSource.close();
+    });
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
+      <h1 className="text-4xl font-bold mb-8">AI Research Assistant</h1>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label htmlFor="model" className="block text-sm font-medium mb-2">
+            Select Model
+          </label>
+          <select
+            id="model"
+            value={selectedModel}
+            onChange={(e) => setSelectedModel(e.target.value)}
+            className="w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            {models.map((model) => (
+              <option key={model} value={model}>
+                {model}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="prompt" className="block text-sm font-medium mb-2">
+            Enter Prompt
+          </label>
+          <textarea
+            id="prompt"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="Write a long-form human interest piece about the Japanese fishermen who are notorious for the drive hunting of dolphins at the cove... We want to understand who these people are, how they ended up hunting dolphins for a living, why they continue in the face of fierce opposition, and what they think the future holds. Be as open minded and unbiased as possible, and look at the matter from a diverse array of perspectives"
+            className="w-full h-40 bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+        >
+          {isLoading ? 'Processing...' : 'Submit'}
+        </button>
+      </form>
+      {output && (
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold mb-4">Output</h2>
+          <pre className="bg-gray-800 p-4 rounded-md overflow-x-auto whitespace-pre-wrap">
+            {output}
+          </pre>
+        </div>
+      )}
+      {resultUrl && (
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold mb-4">Results</h2>
+          <ul className="space-y-2">
+            <li>
+              <a
+                href={`${resultUrl}/final_report.md`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-400 hover:underline"
+              >
+                Download Final Report
+              </a>
+            </li>
+            {[...Array(10)].map((_, index) => (
+              <li key={index}>
+                <a
+                  href={`${resultUrl}/task_${index + 1}.md`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:underline"
+                >
+                  Download Task {index + 1} Report
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+};
+

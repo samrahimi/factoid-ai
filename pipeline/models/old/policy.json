@@ -1,0 +1,73 @@
+{
+  "pipeline_name": "policy_analysis",
+  "steps": [
+    {
+      "name": "planning",
+      "type": "standard_inference",
+      "config": {
+        "temperature": 0.7,
+        "response_format": "json_object",
+        "model_vendor": "openrouter",
+        "max_tokens": 2048,
+        "model_id": "openai/gpt-4o",
+        "system_prompt": "You are a senior project manager at a leading DC PR firm... Take the user's request and break it up into tasks that can be done independently by multiple analysts. There should be no dependency between tasks because analysts work concurrently",
+        "user_prompt": "{userRequest}\n\nOutput Format: Return JSON {project_description: string, task_descriptions: string[]}. Maximum 5 Tasks - we're short on analysts today",
+        "output_key": "project_plan"
+      }
+    },
+    {
+      "name": "research",
+      "type": "mapper",
+      "config": {
+        "temperature": 0.8,
+        "max_tokens": 4096,
+        "model_vendor": "openrouter",
+        "model_id": "perplexity/llama-3.1-sonar-large-128k-online",
+        "system_prompt": "You are a research fellow at a leading political consulting firm in Washington, D.C. Please perform your assigned task precisely and concisely, to support the objectives of the project. Cite all sources used",
+        "user_prompt": "Overall project objective: {current_context}\n\nCurrent task: {task}",
+        "input_key": "project_plan",
+        "context_key": "project_description",
+        "tasks_key": "task_descriptions",
+        "output_key": "research_results"
+      }
+    },
+    {
+      "name": "research_combine",
+      "type": "reducer",
+      "config": {
+        "input_key": "research_results",
+        "output_key": "combined_research",
+        "reduce_function": "concatenate"
+      }
+    },
+    {
+      "name": "delivery",
+      "type": "standard_inference",
+      "config": {
+        "temperature": 1.0,
+        "max_tokens": 16384,
+        "model_vendor": "openrouter",
+        "model_id": "nousresearch/hermes-3-llama-3.1-405b:extended",
+        "system_prompt": "You are a senior communications consultant at a top-tier political consulting firm on K Street in Washington, D.C. Your expertise lies in crafting persuasive and impactful communications materials for clients, including policy briefs, speeches, and talking points. You have a deep understanding of the political landscape and are skilled at tailoring your messaging to resonate with target audiences, including policymakers, journalists, and the general public.",
+        "user_prompt": "Client Request: {userRequest}\n\nResearch Reports:\n\n{combined_research}\n\nBased on the client's needs and the reports from our researchers, craft a comprehensive, detailed, convincing analysis that flows and looks like it was written by a human",
+        "output_key": "final_draft"
+      }
+    },
+    {
+      "name": "factoid",
+      "type": "standard_inference",
+      "config": {
+        "temperature": 0.7,
+        "response_format": "json_object",
+        "model_vendor": "openrouter",
+        "max_tokens": 2048,
+        "model_id": "nousresearch/hermes-3-llama-3.1-405b",
+        "system_prompt": "You are an assistant to a fact checker. Your job is to extract a list of claims made in the document that need to be fact checked",
+        "user_prompt": "Document For Review:\n\n{final_draft}\n\nReturn a JSON array of all claims made that need to be fact checked: {claims: ['claim 1', 'claim 2']}",
+        "input_key": "final_draft",
+        "output_key": "factoids"
+      }
+    }
+
+  ]
+}

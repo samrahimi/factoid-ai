@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TruthScan AI - Advanced Fact-Checking for the Digital Age</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --text-color: #e0e0e0;
+            --dark-bg: #121212;
+            --card-bg: #1e1e1e;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-color: var(--dark-bg);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            background-color: rgba(18, 18, 18, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.8em;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+        .nav-links a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 1.1em;
+        }
+        .menu-toggle {
+            display: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 80px 0;
+            text-align: center;
+            color: #fff;
+        }
+        .hero h1 {
+            font-size: 2.8em;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .hero p {
+            font-size: 1.3em;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .cta-button:hover {
+            background-color: #2980b9;
+        }
+        .features, .testimonials, .pricing {
+            padding: 80px 0;
+            background-color: var(--dark-bg);
+        }
+        .feature-grid, .testimonial-grid, .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        .feature-item, .testimonial-item, .pricing-item {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .feature-item:hover, .testimonial-item:hover, .pricing-item:hover {
+            transform: translateY(-5px);
+        }
+        .feature-icon {
+            font-size: 3em;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        .testimonial-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+        .price {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 20px 0;
+            color: var(--primary-color);
+        }
+        .pricing-features {
+            list-style-type: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+        }
+        .pricing-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+        .pricing-cta {
+            margin-top: auto;
+        }
+        footer {
+            background-color: var(--secondary-color);
+            color: #fff;
+            padding: 40px 0;
+            text-align: center;
+        }
+        footer a {
+            color: #fff;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            .nav-links a:not(.cta-button) {
+                display: none;
+            }
+            .menu-toggle {
+                display: block;
+            }
+        }
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.5em;
+            }
+            .nav-links .cta-button {
+                font-size: 0.9em;
+                padding: 8px 16px;
+            }
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 80px 0;
+            text-align: center;
+            color: #fff;
+        }
+        .hero h1 {
+            font-size: 2.8em;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .hero p {
+            font-size: 1.3em;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+        .input-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .input-area {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            margin-bottom: 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+        .input-area::placeholder {
+            color: #666;
+        }
+        .submit-button {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .submit-button:hover {
+            background-color: #2980b9;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">TruthScan AI</div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#testimonials">Testimonials</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#" class="cta-button">Get Started</a>
+            </div>
+            <div class="menu-toggle">☰</div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Advanced Fact-Checking for the Digital Age</h1>
+            <p>Harness the power of AI to cut through misinformation and uncover the truth with unparalleled accuracy and speed.</p>
+            <div class="input-container">
+                <textarea class="input-area" placeholder="Enter a document or URL to fact-check..."></textarea>
+                <button class="submit-button">Analyze Now</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2>Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Unmatched Accuracy</h3>
+                    <p>Our AI algorithms are trained on a massive dataset, ensuring reliable results.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Real-time Analysis</h3>
+                    <p>Get instant feedback on the veracity of claims as you browse.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <h3>Comprehensive Reports</h3>
+                    <p>Dive deep into the sources and evidence behind each fact check.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🖥️</div>
+                    <h3>User-Friendly Interface</h3>
+                    <p>Intuitive design makes fact-checking accessible to everyone.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <h2>What Our Users Say</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-item">
+                    <img src="https://image.pollinations.ai/prompt/LinkedIn%20Profile%20Pic%20of%20a%20white%20woman%20age%2040%20with%20short%20brown%20hair,%20blue%20eyes,%20glasses" alt="Sarah J." class="testimonial-image">
+                    <p>"TruthScan AI has revolutionized how we verify information in our newsroom. It's an indispensable tool for modern journalism."</p>
+                    <strong>- Sarah J., Senior Editor at Global News Network</strong>
+                </div>
+                <div class="testimonial-item">
+                    <img src="https://image.pollinations.ai/prompt/LinkedIn%20Profile%20Pic%20of%20a%20black%20man%20age%2055%20with%20gray%20hair,%20brown%20eyes,%20glasses" alt="Dr. Michael L." class="testimonial-image">
+                    <p>"As a researcher, the depth of analysis provided by TruthScan AI is impressive. It's saved me countless hours of fact-checking."</p>
+                    <strong>- Dr. Michael L., University Professor</strong>
+                </div>
+                <div class="testimonial-item">
+                    <img src="https://image.pollinations.ai/prompt/LinkedIn%20Profile%20Pic%20of%20an%20asian%20woman%20age%2028%20with%20long%20black%20hair,%20brown%20eyes" alt="Emma R." class="testimonial-image">
+                    <p>"I feel more confident sharing information online knowing that TruthScan AI has my back. It's user-friendly and incredibly accurate."</p>
+                    <strong>- Emma R., Social Media Influencer</strong>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <h2>Choose Your Plan</h2>
+            <div class="pricing-grid">
+                <div class="pricing-item">
+                    <div>
+                        <h3>Free</h3>
+                        <div class="price">$0/mo</div>
+                        <ul class="pricing-features">
+                            <li>5 fact checks per month</li>
+                            <li>Basic reporting</li>
+                            <li>Email support</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-cta">
+                        <a href="#" class="cta-button">Get Started</a>
+                    </div>
+                </div>
+                <div class="pricing-item">
+                    <div>
+                        <h3>Basic</h3>
+                        <div class="price">$9.99/mo</div>
+                        <ul class="pricing-features">
+                            <li>100 fact checks per month</li>
+                            <li>Detailed reporting</li>
+                            <li>Priority email support</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-cta">
+                        <a href="#" class="cta-button">Get Started</a>
+                    </div>
+                </div>
+                <div class="pricing-item">
+                    <div>
+                        <h3>Pro</h3>
+                        <div class="price">$24.99/mo</div>
+                        <ul class="pricing-features">
+                            <li>Unlimited fact checks</li>
+                            <li>Advanced reporting</li>
+                            <li>Priority support</li>
+                            <li>API access</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-cta">
+                        <a href="#" class="cta-button">Get Started</a>
+                    </div>
+                </div>
+                <div class="pricing-item">
+                    <div>
+                        <h3>Enterprise</h3>
+                        <div class="price">Custom</div>
+                        <ul class="pricing-features">
+                            <li>Custom solutions</li>
+                            <li>Dedicated account manager</li>
+                            <li>24/7 support</li>
+                            <li>On-premise deployment options</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-cta">
+                        <a href="#" class="cta-button">Contact Sales</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 TruthScan AI. All Rights Reserved.</p>
+            <p>
+                <a href="#">Privacy Policy</a> | 
+                <a href="#">Terms of Service</a> | 
+                <a href="#">Contact Us</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

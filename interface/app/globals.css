@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+pre {
+  white-space: pre-wrap;       /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Override default styles for dark mode */
+@layer base {
+  body {
+    @apply bg-gray-900 text-gray-100;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-purple-300;
+  }
+
+  a {
+    @apply text-blue-400 hover:text-blue-300;
+  }
+
+  button {
+    @apply bg-gray-800 text-gray-100 hover:bg-gray-700;
+  }
+
+  input, textarea {
+    @apply bg-gray-800 text-gray-100 border-gray-700;
+  }
+}
+
+/* Custom dark mode styles */
+@layer components {
+  .card {
+    @apply bg-gray-800 border-gray-700;
+  }
+
+  .navbar {
+    @apply bg-gray-800 border-gray-700;
+  }
+
+  .footer {
+    @apply bg-gray-800 border-t border-gray-700;
+  }
+}
+
+/* Utility classes for dark mode */
+@layer utilities {
+  .dark-hover:hover {
+    @apply bg-gray-700;
+  }
+
+  .dark-focus:focus {
+    @apply ring-2 ring-blue-500;
+  }
+}
+
+/* Markdown styles */
+.markdown-body.dark {
+  color: #e0e0e0;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.markdown-body.dark h1,
+.markdown-body.dark h2,
+.markdown-body.dark h3,
+.markdown-body.dark h4,
+.markdown-body.dark h5,
+.markdown-body.dark h6 {
+  color: #bb86fc;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  line-height: 1.25;
+}
+
+.markdown-body.dark h1 { font-size: 2em; }
+.markdown-body.dark h2 { font-size: 1.5em; }
+.markdown-body.dark h3 { font-size: 1.25em; }
+.markdown-body.dark h4 { font-size: 1em; }
+
+.markdown-body.dark a {
+  color: #03dac6;
+  text-decoration: none;
+}
+
+.markdown-body.dark a:hover {
+  text-decoration: underline;
+}
+
+.markdown-body.dark ul,
+.markdown-body.dark ol {
+  padding-left: 0;
+  margin-bottom: 16px;
+  margin-top: 16px;
+
+}
+
+.markdown-body.dark li {
+  margin-bottom: 16px;
+}
+
+.markdown-body.dark p {
+  margin-bottom: 16px;
+}
+
+.markdown-body.dark pre {
+  background-color: #2a2a2a;
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  border-radius: 6px;
+}
+
+.markdown-body.dark code {
+  background-color: rgba(110, 118, 129, 0.4);
+  padding: 0.2em 0.4em;
+  border-radius: 6px;
+  font-size: 85%;
+}
+
+.markdown-body.dark pre code {
+  background-color: transparent;
+  padding: 0;
+  font-size: 100%;
+}
