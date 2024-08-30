@@ -232,6 +232,7 @@ async function executeMapperFunction(step, projectDir) {
     tasks = step.config.task_transform(tasks)    
   
   let results = [];
+  let aggregatedResults = ""
 
   for (let i = 0; i < tasks.length; i++) {
     let result
@@ -245,6 +246,11 @@ async function executeMapperFunction(step, projectDir) {
     else
     {
       const flattened_task_context =  {...context,  task: tasks[i] }
+      if (step.config.aggregation_key) {
+        console.log("AGGREGATION KEY: "+step.config.aggregation_key)
+        aggregatedResults = `${aggregatedResults}\n\n---\n\n${result}`
+        flattened_task_context[step.config.aggregation_key] = aggregatedResults
+      }
       //console.log(JSON.stringify(flattened_task_context))
       const promptContent = replaceVariables(step.config.user_prompt, flattened_task_context);
       //console.log("PROMPT: "+promptContent)
@@ -320,4 +326,4 @@ const userRequest = process.argv[4];
 sendControlMessage("status", "Starting...")
 runPipeline(configPath, userRequest, sessionId)
   .then(result => result)
-  .catch(error => {process.stdout.write(error); throw error});
+  .catch(error => {process.stdout.write(error.message);});

@@ -6,12 +6,15 @@
 .pnp.js
 .yarn/install-state.gz
 .env
+.env.*
 
 # user generated content
-/truthful_ui/public
+/interface/public
 /public
 /pipeline/outputs
 /pipeline/temp
+/pipeline/models/old
+/pipeline/models/old/*
 interface/public/image_gen
 
 # testing
