@@ -252,7 +252,13 @@ async function executeMapperFunction(step, projectDir) {
         flattened_task_context[step.config.aggregation_key] = aggregatedResults
       }
       //console.log(JSON.stringify(flattened_task_context))
-      const promptContent = replaceVariables(step.config.user_prompt, flattened_task_context);
+      let promptContent = replaceVariables(step.config.user_prompt, flattened_task_context);
+      if (i ==0 && step.config.user_grounding_context) {
+        const groundingPrefix = replaceVariables(step.config.user_grounding_context, flattened_task_context)
+        console.log("GROUNDING: "+groundingPrefix)
+        promptContent = groundingPrefix + promptContent
+      }
+      
       //console.log("PROMPT: "+promptContent)
       //excellent. our prompt is now prepared, with session- and task-specific variables subbed in
 

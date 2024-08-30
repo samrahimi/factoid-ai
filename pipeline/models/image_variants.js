@@ -58,7 +58,7 @@ function saveBase64Image(base64Image) {
       const randomFilename = `${Math.random().toString(36).substring(2, 15)}.jpeg`;
 
       // Define the path to save the image
-      const imagePath = require('path').join('/home/sam/truthful.ai/truthful_ui/public/image_gen', randomFilename);
+      const imagePath = require('path').join('/home/sam/truthful.ai/interface/public/image_gen', randomFilename);
       const saved = saveBase64ImageToDisk(base64Image, imagePath)
       return randomFilename       
   }

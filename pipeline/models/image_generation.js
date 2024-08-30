@@ -58,7 +58,7 @@ function saveBase64Image(base64Image) {
       const randomFilename = `${Math.random().toString(36).substring(2, 15)}.jpeg`;
 
       // Define the path to save the image
-      const imagePath = require('path').join('/home/sam/truthful.ai/truthful_ui/public/image_gen', randomFilename);
+      const imagePath = require('path').join(process.env.IMAGE_STORAGE_FOLDER, randomFilename);
       const saved = saveBase64ImageToDisk(base64Image, imagePath)
       return randomFilename       
   }
@@ -88,23 +88,21 @@ const load = () => {
         "type": "tool",
         "config": {
           "input_key": "dalle_prompt",
-          "output_key": "image_url",
+          "output_key": "image_urls",
           f: async(input, self, ctx) => {
-            //self is like "this" - it refers to this pipeline block.
-            //process.stdout.write("fuck")
+            // for the free flux variants, the response is base64 encoded images
+            // if using flux pro, the response data shape is the same but the URLs 
+            // are actual URLs to the images
             const imageGenResult = await generateImageFast(input.trim(), 'fal-ai/flux/schnell')
-            //process.stdout.write(imageGenResult.images[0].url)
-            //process.stdout.write("shit")
-            let relativePath="TODO"
-            let result= {user_request: ctx["userRequest"], image_prompt: input, image_paths:[]}
+            let  image_paths=[]
             try {
               imageGenResult.images.forEach((img) => {
                 let relativePath =  saveBase64Image(img.url)
-                process.stdout.write(`\n\n![Generated Image](http://localhost:3000/image_gen/${relativePath})\n\n`)
-                result.image_paths.push(relativePath)
+                process.stdout.write(`\n\n![Generated Image](${process.env.IMAGE_SERVER_URL}/${relativePath})\n\n`)
+                image_paths.push(relativePath)
               })             
             } catch(x) {process.stdout.write(x.toString())}
-            return result
+            return image_paths
           }
         }
       },
