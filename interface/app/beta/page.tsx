@@ -72,7 +72,7 @@ const App = () => {
   }
   useEffect(() => {
     if (!connected) {
-        const newSocket = new WebSocket('ws://45.63.9.142:1207')
+        const newSocket = new WebSocket(`ws://${process.env.NEXT_PUBLIC_PIPELINE_API_SERVER}/api/ws`);
 
         newSocket.onopen = () => {
             setConnected(true)
@@ -113,7 +113,7 @@ const App = () => {
     //setAborter(new AbortController());
     //setBytes(0);
  
-    getStreamingFactcheckResponse(`http://45.63.9.142:1207/api/run-pipeline`,
+    getStreamingFactcheckResponse(`http://${process.env.NEXT_PUBLIC_PIPELINE_API_SERVER}/api/run-pipeline`,
         promptText,
       selectedModel,
       { signal: aborter.signal });

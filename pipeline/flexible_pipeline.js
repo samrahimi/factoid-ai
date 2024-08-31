@@ -9,8 +9,9 @@ var context = { };
 var SESSION_ID="" //the client session ID, for sending back status messages
 var PROJECT_ID="" //the ID that determines where results are stored
 
-const API_SERVER = process.env.PIPELINE_API_SERVER || 'http://45.63.9.142:1207'
-const UI_SERVER = process.env.UI_SERVER || 'http://localhost:3000'
+const API_SERVER = `http://${process.env.PIPELINE_API_SERVER || 'localhost:1207'}`
+
+const UI_SERVER = process.env.WEBSITE_URL || 'http://localhost:3000'
 
 async function triggerEventForClient(clientId, eventData) {
   const endpoint = '/api/notify';
