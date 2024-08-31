@@ -9,7 +9,7 @@ var context = { };
 var SESSION_ID="" //the client session ID, for sending back status messages
 var PROJECT_ID="" //the ID that determines where results are stored
 
-const API_SERVER = process.env.PIPELINE_API_SERVER || 'http://localhost:1207'
+const API_SERVER = process.env.PIPELINE_API_SERVER || 'http://45.63.9.142:1207'
 const UI_SERVER = process.env.UI_SERVER || 'http://localhost:3000'
 
 async function triggerEventForClient(clientId, eventData) {
@@ -48,7 +48,7 @@ function sendControlMessage(messageType, messagePayload) {
 
 
 const agentFactory = require('../lib/agent');
-const { stdout } = require('process');
+const { stdout, stderr } = require('process');
 const logContext=() =>true; 
 
 async function runPipeline(configPath, userRequest, sessionId) {
@@ -93,7 +93,10 @@ async function runPipeline(configPath, userRequest, sessionId) {
       case 'reducer':
         await executeReducer(step, projectDir);
         break;
-
+      case 'spawn':
+        await spawn(step.config.child_model, sessionId, 
+          replaceVariables(step.config.prompt, context))
+        break;
       case 'pipeline_complete': 
         await executeFinalizer(step, projectDir);
         break
@@ -126,6 +129,36 @@ async function executeFinalizer(step, projectDir) {
   clientContext.done = true
   clientContext.report_url=`${API_SERVER}/api/view-document?projectId=${PROJECT_ID}&contentId=${step.config.input_key}`
   sendControlMessage("update_context",clientContext)
+}
+const spawn=(model, clientId, prompt) => {
+  const { spawn } = require('child_process');
+  const child = spawn('node', ['flexible_pipeline.js',"./models/"+model+".js", clientId, prompt], {
+    env: {
+      ...process.env,
+      OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+      OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
+      ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
+      GOOGLE_AI_API_KEY: process.env.GOOGLE_AI_API_KEY,
+      MISTRAL_API_KEY: process.env.MISTRAL_API_KEY,
+      PERPLEXITY_API_KEY:process.env.PERPLEXITY_API_KEY
+
+    }
+  });
+
+  child.stdout.on('data', (data) => {
+    stdout.write(data);
+  });
+
+  child.stderr.on('data', (data) => {
+    //if (process.env.SHOW_ERRORS)
+      stderr.write(data) 
+  });
+
+  child.on('close', (code) => {
+    //res.write(`data: Process exited with code ${code}\n\n`);
+    res.write("[sidechain done]")
+    res.end();
+  });
 }
 async function runTool(step, projectDir) {
   try {

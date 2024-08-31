@@ -59,7 +59,7 @@ export default function Home() {
    const aborter = new AbortController();
    setBytes(0);
 
-   getStreamingFactcheckResponse(`http://localhost:1207/api/run-pipeline`,
+   getStreamingFactcheckResponse(`http://45.63.9.142:1207/api/run-pipeline`,
      prompt,
      selectedModel,
      { signal: aborter.signal });

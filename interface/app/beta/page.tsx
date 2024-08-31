@@ -72,7 +72,7 @@ const App = () => {
   }
   useEffect(() => {
     if (!connected) {
-        const newSocket = new WebSocket('ws://localhost:1207')
+        const newSocket = new WebSocket('ws://45.63.9.142:1207')
 
         newSocket.onopen = () => {
             setConnected(true)
@@ -113,7 +113,7 @@ const App = () => {
     //setAborter(new AbortController());
     //setBytes(0);
  
-    getStreamingFactcheckResponse(`http://localhost:1207/api/run-pipeline`,
+    getStreamingFactcheckResponse(`http://45.63.9.142:1207/api/run-pipeline`,
         promptText,
       selectedModel,
       { signal: aborter.signal });

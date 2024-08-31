@@ -24,7 +24,7 @@ export default function Home() {
 
   const fetchModels = async () => {
     try {
-      const response = await axios.get('http://localhost:1207/api/models');
+      const response = await axios.get('http://45.63.9.142:1207/api/models');
       setModels(response.data);
     } catch (error) {
       console.error('Error fetching models:', error);
@@ -76,7 +76,7 @@ export default function Home() {
 
     
     //button.addEventListener("click", () => aborter.abort());
-    getStreamingFactcheckResponse(`http://localhost:1207/api/run-pipeline`, 
+    getStreamingFactcheckResponse(`http://45.63.9.142:1207/api/run-pipeline`, 
       prompt, 
       selectedModel, 
       { signal: aborter.signal });

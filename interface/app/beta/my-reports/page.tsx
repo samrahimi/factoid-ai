@@ -62,7 +62,7 @@ export default function MyReportsPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6 text-purple-300">My Reports</h1>
+      <h1 className="text-2xl font-semibold mb-6 text-purple-300">My Reports</h1>
       {reports.length === 0 ? (
         <p className="text-gray-300">You haven't created any reports yet.</p>
       ) : (
@@ -85,7 +85,7 @@ export default function MyReportsPage() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-4xl max-h-full overflow-auto">
             <div className="flex justify-between items-center p-4 border-b border-gray-700">
-              <h2 className="text-xl font-bold text-gray-100">{selectedReport.claim}</h2>
+              <h2 className="text-xl font-medium text-gray-100">{selectedReport.claim}</h2>
               <button
                 onClick={closeModal}
                 className="text-gray-400 hover:text-gray-200"

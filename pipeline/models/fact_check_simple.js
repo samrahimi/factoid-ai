@@ -34,7 +34,7 @@ const load = () => {
             "temperature": 0.66,
             "max_tokens": 8192,
             "model_vendor": "cohere",
-            "model_id": "command-r-plus",
+            "model_id": "command-r-plus-08-2024",
             tool_options: {
               web: true
             },

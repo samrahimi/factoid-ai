@@ -67,7 +67,7 @@ const load = () => {
             "temperature": 0.66,
             "max_tokens": 2048,
             "model_vendor": "cohere",
-            "model_id": "command-r-plus",
+            "model_id": "command-r-plus-08-2024",
             tool_options: {
               citationQuality: "accurate",
               web: true,
@@ -98,7 +98,7 @@ const load = () => {
             "temperature": 0.85,
             "max_tokens": 8192,
             "model_vendor": "cohere",
-            "model_id": "command-r-plus",
+            "model_id": "command-r-plus-08-2024",
             tool_options: {
               //citationQuality: "fast",
               web: false,
@@ -113,6 +113,20 @@ const load = () => {
             output_to_client: true,
             output_to_display: true,
             step_header_text: "COMPREHENSIVE OVERVIEW",
+          }
+        },
+        //ILLUSTRATION!
+        {
+          name: "cover_art",
+          type: "spawn",
+          description: "Add Images",
+          progress: 65,
+          credits_used: 2,
+          config: {
+            pipeline_name: "generate_image",
+            prompt: "based on this article, please come up with and generate a proper cover image. the image prompt should be detailed yet concise, and there should be only 1 short text phrase (1 - 5 words) if any, in the image:\n\n{article}",
+            output_to_display: true,
+            step_header_text: "CREATING COVER IMAGE",
           }
         },
         {
