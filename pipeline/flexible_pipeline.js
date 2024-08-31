@@ -95,7 +95,7 @@ async function runPipeline(configPath, userRequest, sessionId) {
         await executeReducer(step, projectDir);
         break;
       case 'spawn':
-        await spawn(step.config.child_model, sessionId, 
+        await spawn(step.config.pipeline_name, sessionId, 
           replaceVariables(step.config.prompt, context))
         break;
       case 'pipeline_complete': 
