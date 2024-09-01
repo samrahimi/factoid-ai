@@ -15,6 +15,8 @@ const wss = new WebSocket.Server({ server });
 const cors= require('cors')
 app.use(cors())
 app.use(express.json())
+// Serve static files from the 'public' folder
+app.use(express.static(path.join(__dirname, 'image_outputs')));
 
 // Map to store open socket connections
 const clients = new Map();

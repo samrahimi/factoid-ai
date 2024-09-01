@@ -23,7 +23,7 @@ const load = () => {
           config: {
             f: async (input, self, ctx) => {
               const {getPrimaryClaim} = require("../../lib/utils")
-              const result = await getPrimaryClaim(input)
+              const result = input // await getPrimaryClaim(input)
               if (result.startsWith("Error:")) {
                 process.stdout.write("Error: no claims found. Please ensure your input contains at least 1 (one) statement or question of fact, which can be proven or debunked by a researcher")
 
@@ -95,8 +95,8 @@ const load = () => {
           toggle_text: "Write Complete Article",
 
           "config": {
-            "temperature": 0.85,
-            "max_tokens": 8192,
+            "temperature": 0.5,
+            "max_tokens": 3000,
             "model_vendor": "cohere",
             "model_id": "command-r-plus-08-2024",
             tool_options: {
@@ -106,7 +106,7 @@ const load = () => {
               citationsHeaderText: `\n\nConfirming all citations and creating your reading list, please wait...\n\n`, //if not rendering to the markdown stream, this should be a status message of some kind
               use_cached_documents: true
             },
-            "system_prompt": "You are an award winning investigative journalist. Please write a detailed, gripping and/or entertaining article about the topic which has been submitted by our fact checker, using the sources provided, as well as any other sources that you consult when writing the article",
+            "system_prompt": "You are an award winning investigative journalist. Please write a detailed, gripping and/or entertaining article about the topic which has been submitted by our fact checker, using the sources provided, as well as any other sources that you consult when writing the article. Your response should be approximately 1000-1200 words long",
             "user_prompt": "Claim:\n\n{claim}\n\n---\n\nAnalysis:\n\n{evaluation}\n\n---\n\nYour Article:",
             "input_key": "evaluation",
             "output_key": "article",
@@ -123,10 +123,11 @@ const load = () => {
           progress: 65,
           credits_used: 2,
           config: {
-            pipeline_name: "generate_image",
-            prompt: "based on this article, please come up with and generate a proper cover image. the image prompt should be detailed yet concise, and there should be only 1 short text phrase (1 - 5 words) if any, in the image:\n\n{article}",
+            pipeline_name: "image_generation",
+            prompt: "based on this article, please come up with and generate a proper cover image. the image prompt should be detailed yet concise, and you should NOT request any text in the image:\n\n{article}",
             output_to_display: true,
-            step_header_text: "CREATING COVER IMAGE",
+            output_to_client: true,
+		step_header_text: "CREATING COVER IMAGE",
           }
         },
         {

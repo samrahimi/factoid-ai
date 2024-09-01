@@ -41,10 +41,10 @@ const load = () => {return {
     {
     "temperature": 0.9,
     "max_tokens": 8192,
-     "model_vendor": "openrouter",
-     "model_id": "anthropic/claude-3.5-sonnet:beta",
-     "system_prompt": "You are a senior reporter for the New York Times, and a celebrated investigative journalist who writes long-form, detailed, and often shocking stories that bring the truth to light and are fascinating to read",
-     "user_prompt": "Research Reports:\n\n{compiled_research}\n\n---\n\n{project_description}\n\nPlease write a highly readable yet very detailed and descriptive article on the subject using the context provided by our research team"
+     "model_vendor": "google",
+     "model_id": "gemini-1.5-pro-exp-0827",
+     "system_prompt": "You are a celebrated investigative journalist who writes long-form, detailed, and often shocking stories that bring the truth to light and are fascinating to read",
+     "user_prompt": "Research Reports:\n\n{compiled_research}\n\n---\n\n{userRequest} ({project_description})\n\nPlease write a highly detailed and descriptive article, based on the context. Write at least 4500 words"
    }}]
 
 }}

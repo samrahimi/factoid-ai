@@ -11,6 +11,7 @@
 /interface/public
 /public
 /pipeline/outputs
+/pipeline/image_outputs
 /pipeline/temp
 /pipeline/models/old
 /pipeline/models/old/*

@@ -133,33 +133,29 @@ async function executeFinalizer(step, projectDir) {
 }
 const spawn=(model, clientId, prompt) => {
   const { spawn } = require('child_process');
-  const child = spawn('node', ['flexible_pipeline.js',"./models/"+model+".js", clientId, prompt], {
-    env: {
-      ...process.env,
-      OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-      OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
-      ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
-      GOOGLE_AI_API_KEY: process.env.GOOGLE_AI_API_KEY,
-      MISTRAL_API_KEY: process.env.MISTRAL_API_KEY,
-      PERPLEXITY_API_KEY:process.env.PERPLEXITY_API_KEY
-
-    }
-  });
+  const child = spawn('node', ['flexible_pipeline.js',"./models/"+model+".js", clientId, prompt]);
 
   child.stdout.on('data', (data) => {
-    stdout.write(data);
+    process.stdout.write(data);
   });
 
   child.stderr.on('data', (data) => {
     //if (process.env.SHOW_ERRORS)
-      stderr.write(data) 
+      process.stderr.write(data) 
   });
+
+  //child.on('close', (code) => {
+    //res.write(`data: Process exited with code ${code}\n\n`);
+  //  res.write("[sidechain done]")
+  //  res.end();
+  //});
 
   child.on('close', (code) => {
     //res.write(`data: Process exited with code ${code}\n\n`);
-    res.write("[sidechain done]")
-    res.end();
+    process.stdout.write("[side process completed successfully, code: "+code+"]")
+    //res.end();
   });
+
 }
 async function runTool(step, projectDir) {
   try {
@@ -270,7 +266,7 @@ async function executeMapperFunction(step, projectDir) {
 
   for (let i = 0; i < tasks.length; i++) {
     let result
-    stdout.write(`\n\n [step: ${step.name}, iteration: ${i}, input: ${tasks[i]}] \n\n`)
+    //stdout.write(`\n\n [step: ${step.name}, iteration: ${i}, input: ${tasks[i]}] \n\n`)
     //needs refactor
     if ( typeof step.config.f === "function") {
       result= await step.config.f(tasks[i], step, context) 
@@ -289,7 +285,7 @@ async function executeMapperFunction(step, projectDir) {
       let promptContent = replaceVariables(step.config.user_prompt, flattened_task_context);
       if (i ==0 && step.config.user_grounding_context) {
         const groundingPrefix = replaceVariables(step.config.user_grounding_context, flattened_task_context)
-        console.log("GROUNDING: "+groundingPrefix)
+        //console.log("GROUNDING: "+groundingPrefix)
         promptContent = groundingPrefix + promptContent
       }
       
