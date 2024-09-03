@@ -95,10 +95,15 @@ async function runPipeline(configPath, userRequest, sessionId) {
         await executeReducer(step, projectDir);
         break;
       case 'spawn':
-        await spawn(step.config.pipeline_name, sessionId, 
-          replaceVariables(step.config.prompt, context), 
-          step.config.output_to_display
-        )
+        const stepSettings = step.config
+        await spawn(
+          stepSettings.pipeline_name, 
+          sessionId, 
+          replaceVariables(stepSettings.prompt, context), 
+          stepSettings.output_to_display,
+          stepSettings.output_key,
+          stepSettings.response_format)
+        
         break;
       case 'pipeline_complete': 
         await executeFinalizer(step, projectDir);
@@ -136,7 +141,7 @@ async function executeFinalizer(step, projectDir) {
   sendControlMessage("update_context",clientContext)
 }
 //this is a hack to run a pipeline from within a pipeline. omg this is so meta
-const spawn=(model, clientId, prompt, showOutput) => {
+const spawn=(model, clientId, prompt, showOutput, outputKey, responseFormat) => {
   const { spawn } = require('child_process');
   const child = spawn('node', ['flexible_pipeline.js',"./models/"+model+".js", SESSION_ID, prompt]);
   const __RESULT_BUFFER = {raw: "", live: {}}
@@ -163,12 +168,17 @@ const spawn=(model, clientId, prompt, showOutput) => {
       //no. die quietly. process.stderr.write(data) 
   });
 
+
+  // When the child process exits, figure out the response format and save the result to the context
+  // Whatever you save to the context will be sent back to the client
   child.on('close', (code) => {
-    if (step.config.response_format && step.config.response_format == "json_object")
-      result = utils.fixJson(result)
-    context[step.config.output_key] = result;
-    //return result;
-  
+    if (responseFormat && responseFormat == "json_object")
+    {
+      parse_result_buffer()
+      context[stepSettings.output_key] = __RESULT_BUFFER.live
+    } else {
+      context[step.config.output_key] = __RESULT_BUFFER.raw;
+    }
   });
 
 
