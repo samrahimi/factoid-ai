@@ -8,6 +8,8 @@ dotenv.config({ path: path.join(__dirname, '..', '.env') });
 var context = { };
 var SESSION_ID="" //the client session ID, for sending back status messages
 var PROJECT_ID="" //the ID that determines where results are stored
+var isSubPipeline = false
+
 
 const API_SERVER = `http://${process.env.PIPELINE_API_SERVER || 'localhost:1207'}`
 
@@ -41,7 +43,7 @@ async function triggerEventForClient(clientId, eventData) {
 
 //send a one way message to the client, to update status or what have you
 function sendControlMessage(messageType, messagePayload) {
-  triggerEventForClient(SESSION_ID, {messageType, messagePayload})
+  triggerEventForClient(SESSION_ID, {messageType, messagePayload, isSubPipeline})
   ////console.log(`@@${messageType.toUpperCase()} ${messagePayload}`)
 }
 
@@ -50,17 +52,32 @@ function sendControlMessage(messageType, messagePayload) {
 
 const agentFactory = require('../lib/agent');
 const { stdout, stderr } = require('process');
+const { custom } = require('zod');
 const logContext=() =>true; 
 
-async function runPipeline(configPath, userRequest, sessionId) {
+async function runPipeline(configPath, userRequest, sessionId, customProjectId, isSubPipeline) {
   context = {userRequest}
   SESSION_ID = sessionId
   // Read and parse the configuration file
   //const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
   const config = require(configPath).load()
   // Generate a unique project ID
-  PROJECT_ID = 'project-' + Date.now().toString(36) + Math.random().toString(36).substr(2);
+  PROJECT_ID = (customProjectId != null && isSubPipeline) ? customProjectId :
+   'project-' + Date.now().toString(36) + Math.random().toString(36).substr(2);
   // Create a new folder for the project
+
+  //a sub pipeline will send all keyed context updates to the original client 
+  //same as a master pipeline, on the same project id and session id. 
+
+  //this can present a problem if the subpipeline's keys conflict with that of the master
+  //for instance, the sub's "user_request" is going to be whatever the input was for the sub
+  //and typically its undesirable to clobber the master's user_request with the sub's user_request
+
+  //this is a known issue and will be addressed in a future release
+  //for now we just include a flag to indicate that we are a subpipeline when sending updates
+  //and the client can decide how to handle it
+  isSubPipeline = isSubPipeline
+
   const projectDir = path.join(process.cwd(), process.env.OUTPUT_PATH || "outputs", PROJECT_ID);
   fs.mkdirSync(projectDir, { recursive: true });
   clientContext = {userRequest, PROJECT_ID, done: false}
@@ -143,7 +160,7 @@ async function executeFinalizer(step, projectDir) {
 //this is a hack to run a pipeline from within a pipeline. omg this is so meta
 const spawn=(model, clientId, prompt, showOutput, outputKey, responseFormat) => {
   const { spawn } = require('child_process');
-  const child = spawn('node', ['flexible_pipeline.js',"./models/"+model+".js", SESSION_ID, prompt]);
+  const child = spawn('node', ['flexible_pipeline.js',"./models/"+model+".js", SESSION_ID, prompt, 'PROJCT:'+PROJECT_ID]);
   const __RESULT_BUFFER = {raw: "", live: {}, error: ""}
   const results_to = (fragment) => { __RESULT_BUFFER.raw += fragment; }
   const parse_result_buffer = () => { 
@@ -385,7 +402,18 @@ const sessionId= process.argv[3]
 const userRequest = process.argv[4];
 //const customProjectId = process.argv[4]
 //console.log({configPath, sessionId, userRequest})
-sendControlMessage("status", "Starting...")
-runPipeline(configPath, userRequest, sessionId)
+
+if (process.argv[5]) {
+  const customProjectId  = process.argv[5].split(':')[1] //if we are running a sub-pipeline, we need to know the project ID
+
+  sendControlMessage("status", "Starting CHILD pipeline... events will update the parent project, output to parent context")
+  runPipeline(configPath, userRequest, sessionId, customProjectId, true)
+    .then(result => result)
+    .catch(error => {process.stdout.write(error.message);});
+
+} else {
+  sendControlMessage("status", "Starting... Master pipeline mode active, will create a new project")
+runPipeline(configPath, userRequest, sessionId, null, false)
   .then(result => result)
   .catch(error => {process.stdout.write(error.message);});
+}
