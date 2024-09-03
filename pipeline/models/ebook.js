@@ -26,7 +26,8 @@ const load = () => {
             output_key: "chapters",
             output_to_client: true,
             output_to_display: true,
-            max_tokens: 2048
+            max_tokens: 2048,
+            DEBUG: true
           },
         },
         {
@@ -36,7 +37,7 @@ const load = () => {
           "config": {
             "temperature": 0.95,
             "model_vendor": "google",
-            "model_id": "gemini-1.5-pro-exp-0801",
+            "model_id": "gemini-1.5-pro-exp-0827",
 		/*
             "temperature": 0.85,
             "max_tokens": 4096,
