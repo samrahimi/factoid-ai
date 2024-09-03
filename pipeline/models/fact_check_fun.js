@@ -127,6 +127,8 @@ const load = () => {
             prompt: "based on this article, please come up with and generate a proper cover image. the image prompt should be detailed yet concise, and you should NOT request any text in the image:\n\n{article}",
             output_to_display: true,
             output_to_client: true,
+            output_key: "image_urls",
+            response_format: "json_object",
             //json_stdout_override: true, //we want to send the image url to the client
 		        step_header_text: "CREATING COVER IMAGE",
           }

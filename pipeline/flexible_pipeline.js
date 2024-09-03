@@ -171,12 +171,6 @@ const spawn=(model, clientId, prompt, showOutput) => {
   
   });
 
-  child.on('close', (code) => {
-    //res.write(`data: Process exited with code ${code}\n\n`);
-
-    process.stdout.write("[side process completed successfully, code: "+code+"]")
-    //res.end();
-  });
 
 }
 async function runTool(step, projectDir) {
