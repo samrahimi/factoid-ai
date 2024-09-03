@@ -103,7 +103,10 @@ const load = () => {
               })             
             } catch(x) {process.stdout.write(x.toString())}
             return image_paths
-          }
+          },
+          json_stdout_override: true, //we want to send the image url to the client
+          output_to_client: true,
+          output_to_display: true,
         }
       },
     ]

@@ -96,16 +96,20 @@ async function runPipeline(configPath, userRequest, sessionId) {
         break;
       case 'spawn':
         await spawn(step.config.pipeline_name, sessionId, 
-          replaceVariables(step.config.prompt, context))
+          replaceVariables(step.config.prompt, context), 
+          step.config.output_to_display
+        )
         break;
       case 'pipeline_complete': 
         await executeFinalizer(step, projectDir);
         break
-
+      case 'done':
+        sendControlMessage("done", {projectId: PROJECT_ID})
       default:
         throw new Error(`Unknown step type: ${step.type}`);
     }
 
+    //if the step has an output key, and is set to output to the client, we send the result back to the client
     if (step.config.output_to_client && step.config.output_key) {
       clientContext[step.config.output_key] = context[step.config.output_key]
       sendControlMessage("update_results",clientContext)
@@ -131,27 +135,45 @@ async function executeFinalizer(step, projectDir) {
   clientContext.report_url=`${API_SERVER}/api/view-document?projectId=${PROJECT_ID}&contentId=${step.config.input_key}`
   sendControlMessage("update_context",clientContext)
 }
-const spawn=(model, clientId, prompt) => {
+//this is a hack to run a pipeline from within a pipeline. omg this is so meta
+const spawn=(model, clientId, prompt, showOutput) => {
   const { spawn } = require('child_process');
-  const child = spawn('node', ['flexible_pipeline.js',"./models/"+model+".js", clientId, prompt]);
+  const child = spawn('node', ['flexible_pipeline.js',"./models/"+model+".js", SESSION_ID, prompt]);
+  const __RESULT_BUFFER = {raw: "", live: {}}
+  const results_to = (fragment) => { __RESULT_BUFFER.raw += fragment; }
+  const parse_result_buffer = () => { 
+    try {
+      __RESULT_BUFFER.live =  JSON.parse(__RESULT_BUFFER.raw)
+    }
+    catch (e) {
+      __RESULT_BUFFER.live = __RESULT_BUFFER.raw
+    }
+    return __RESULT_BUFFER.live
+  }
 
   child.stdout.on('data', (data) => {
-    process.stdout.write(data);
+    if (showOutput)
+      process.stdout.write(data);
+    results_to(data)
   });
 
   child.stderr.on('data', (data) => {
+
     //if (process.env.SHOW_ERRORS)
-      process.stderr.write(data) 
+      //no. die quietly. process.stderr.write(data) 
   });
 
-  //child.on('close', (code) => {
-    //res.write(`data: Process exited with code ${code}\n\n`);
-  //  res.write("[sidechain done]")
-  //  res.end();
-  //});
+  child.on('close', (code) => {
+    if (step.config.response_format && step.config.response_format == "json_object")
+      result = utils.fixJson(result)
+    context[step.config.output_key] = result;
+    //return result;
+  
+  });
 
   child.on('close', (code) => {
     //res.write(`data: Process exited with code ${code}\n\n`);
+
     process.stdout.write("[side process completed successfully, code: "+code+"]")
     //res.end();
   });
