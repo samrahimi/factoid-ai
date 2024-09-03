@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';         
 import { UploadCloud, Link, FileText } from 'lucide-react';
 import FactCheckProgressScreen from './FactCheckProgressScreen';
-import { upsertReportToSupabase, ReportPayload } from '@/lib/reports';
+import { ReportPayload, updateReport } from '@/lib/reports';
 import { supabase } from '../../lib/supabaseClient';
 
 const App = () => {
@@ -89,7 +89,7 @@ const App = () => {
             } else if (message.type === 'event' && message.data.messageType === 'update_results') {
                 console.log('Received update_context event:', message.data);
                 try {
-                    await upsertReportToSupabase(message.data.messagePayload as ReportPayload);
+                    await updateReport(message.data.messagePayload as ReportPayload);
                 } catch (error) {
                     console.error('Failed to upsert report:', error);
                     // You might want to add some user feedback here
