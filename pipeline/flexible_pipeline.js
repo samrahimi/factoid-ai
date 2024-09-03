@@ -144,7 +144,7 @@ async function executeFinalizer(step, projectDir) {
 const spawn=(model, clientId, prompt, showOutput, outputKey, responseFormat) => {
   const { spawn } = require('child_process');
   const child = spawn('node', ['flexible_pipeline.js',"./models/"+model+".js", SESSION_ID, prompt]);
-  const __RESULT_BUFFER = {raw: "", live: {}}
+  const __RESULT_BUFFER = {raw: "", live: {}, error: ""}
   const results_to = (fragment) => { __RESULT_BUFFER.raw += fragment; }
   const parse_result_buffer = () => { 
     try {
@@ -163,7 +163,7 @@ const spawn=(model, clientId, prompt, showOutput, outputKey, responseFormat) => 
   });
 
   child.stderr.on('data', (data) => {
-
+    __RESULT_BUFFER.error += data
     //if (process.env.SHOW_ERRORS)
       //no. die quietly. process.stderr.write(data) 
   });
@@ -175,9 +175,9 @@ const spawn=(model, clientId, prompt, showOutput, outputKey, responseFormat) => 
     if (responseFormat && responseFormat == "json_object")
     {
       parse_result_buffer()
-      context[stepSettings.output_key] = __RESULT_BUFFER.live
+      context[outputKey] = __RESULT_BUFFER.live
     } else {
-      context[step.config.output_key] = __RESULT_BUFFER.raw;
+      context[outputKey] = __RESULT_BUFFER.raw;
     }
   });
 
