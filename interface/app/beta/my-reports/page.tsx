@@ -21,7 +21,12 @@ interface Report {
     works_cited: any;
     related_questions: any;
     image_urls: any
-  };
+    catchy_title: any
+    adjudication: any
+    category: any
+    tags: any
+    publication_info: any
+    };
 }
 
 export default function MyReportsPage() {
@@ -76,8 +81,8 @@ export default function MyReportsPage() {
               className="bg-gray-800 p-4 rounded-lg shadow cursor-pointer hover:bg-gray-700 transition-colors duration-200"
             >
               <img src={report.cover_image ? `${process.env.NEXT_PUBLIC_IMAGE_SERVER_URL}/${report.cover_image}` : "placeholder"} width="100%" alt="Placeholder" className=" rounded-lg mb-4" />
-              <div className="text-l font-semibold mb-2 text-gray-100 max-h-18 overflow-clip">{report.claim}</div>
-              <p className="text-gray-300 mb-2">Created: {new Date(report.created_at).toLocaleString()}</p>
+              <div className="text-l font-semibold mb-2 text-gray-100 max-h-18 overflow-clip">{report.parsed?.publication_info?.catchy_title || report.claim}</div>
+              <p style={{}}  className="text-gray-300 mb-2 text-sm">Created: {new Date(report.created_at).toLocaleString()}</p>
               <div style={{overflow:"hidden", height: "3rem"}}>
               <ReactMarkdown>{report.evaluation}</ReactMarkdown>
               </div>

@@ -89,11 +89,12 @@ const App = () => {
             } else if (message.type === 'event' && message.data.messageType === 'update_results') {
                 console.log('Received update_context event:', message.data);
                 try {
-                    if (message.data.messagePayload.publication_info) {
-                        const payload = {PROJECT_ID: message.data.messagePayload.PROJECT_ID, ...message.data.messagePayload.publication_info}
-                        await updateReport(payload as ReportPayload);
-                      } else 
-                        await updateReport(message.data.messagePayload as ReportPayload);
+                  await updateReport(message.data.messagePayload as ReportPayload);
+                    // if (message.data.messagePayload.publication_info) {
+                    //     const payload = {...message.data.messagePayload, ...message.data.messagePayload.publication_info }
+                    //     await updateReport(payload as ReportPayload);
+                    //   } else 
+                    //     await updateReport(message.data.messagePayload as ReportPayload);
                 } catch (error) {
                     console.error('Failed to upsert report:', error);
                     // You might want to add some user feedback here
@@ -172,7 +173,7 @@ const App = () => {
 const HomeScreen = ({onSubmit}) => {
   const [text, setText] = useState(location.href.indexOf('?claim=') > 0 ? 
   decodeURIComponent(location.href.split('?claim=')[1]):
-  `Did Tim Walz actually end up in the ER due to ingestion of horse semen, back in 1995?`);
+  `Did we actually put a man on the moon?`);
   const [url, setUrl] = useState('');
 
   const handleSubmit = (e) => {

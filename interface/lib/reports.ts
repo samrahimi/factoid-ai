@@ -24,7 +24,7 @@ export interface ReportPayload {
 export async function getReports(userId, autoParseMetadata = true) {
   const { data, error } = await supabase
     .from('reports')
-    .select('id, created_at, user_request, claim, evaluation, category, article, metadata, cover_image, category, tags, adjudication, catchy_title, image_urls')
+    .select('*')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
@@ -47,6 +47,9 @@ export async function getReports(userId, autoParseMetadata = true) {
 }
 
 export async function updateReport(payload: ReportPayload) {
+
+  console.log(JSON.stringify(payload, null, 2))
+
   if (!payload.PROJECT_ID) {
     throw new Error('Missing required field project_id');
   }
@@ -87,7 +90,7 @@ export async function updateReport(payload: ReportPayload) {
       updateData.cover_image = payload.image_urls[0];
     }
     if (payload.catgory !== undefined && existingRecord.category === null) {
-      updateData.category = payload.catgory;
+      updateData.category = payload.category;
     }
     if (payload.tags !== undefined && existingRecord.tags === null) {
       updateData.tags = payload.tags;
