@@ -98,7 +98,7 @@ const load = () => {
             "temperature": 0.5,
             "max_tokens": 3000,
             "model_vendor": "cohere",
-            "model_id": "command-r-plus-08-2024",
+            "model_id": "command-r-plus",
             tool_options: {
               //citationQuality: "fast",
               web: false,
@@ -205,7 +205,6 @@ const load = () => {
             "user_prompt": `User Claim or Question:\n\n{prompt}\n\nFact Check Results:\n\n{evaluation}\n\n---\n\nBased on the original claim and the fact-checking results, please classify the content and provide a JSON object with the following keys: {catchy_title, adjudication, category, tags}`,
             "input_key": "article",
             "output_key": "publication_info",
-            response_format: "json_object",
             output_to_client: true,   //when complete, the output will be sent as an update msg to the client socket
             output_to_display: false,  //because its json, we'll let the client decide how to render it
             step_header_text: "Finalizing your Reading List, please wait...",
