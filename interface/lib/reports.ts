@@ -11,12 +11,20 @@ export interface ReportPayload {
   done?: boolean;
   parsed? : object
   cover_image?: string;
+
+  catgory?: string
+  tags?: string
+  adjudication?: string 
+  catchy_title?: string 
+  
+  image_urls?: string[];
+    
   [key: string]: any; // Allow for additional properties
 }
 export async function getReports(userId, autoParseMetadata = true) {
   const { data, error } = await supabase
     .from('reports')
-    .select('id, created_at, user_request, claim, evaluation, category, article, metadata, cover_image')
+    .select('id, created_at, user_request, claim, evaluation, category, article, metadata, cover_image, category, tags, adjudication, catchy_title, image_urls')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
@@ -78,7 +86,21 @@ export async function updateReport(payload: ReportPayload) {
     if (payload.image_urls !== undefined && existingRecord.cover_image === null) {
       updateData.cover_image = payload.image_urls[0];
     }
-
+    if (payload.catgory !== undefined && existingRecord.category === null) {
+      updateData.category = payload.catgory;
+    }
+    if (payload.tags !== undefined && existingRecord.tags === null) {
+      updateData.tags = payload.tags;
+    }
+    if (payload.adjudication !== undefined && existingRecord.adjudication === null) {
+      updateData.adjudication = payload.adjudication;
+    }
+    if (payload.catchy_title !== undefined && existingRecord.catchy_title === null) {
+      updateData.catchy_title = payload.catchy_title;
+    }
+    if (payload.image_urls !== undefined && existingRecord.image_urls === null) {
+      updateData.image_urls = payload.image_urls;
+    }
     // Always update the metadata with the full payload
     updateData.metadata = JSON.stringify(payload);
     // Add timestamp for the update

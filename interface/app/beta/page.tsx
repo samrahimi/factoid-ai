@@ -89,7 +89,11 @@ const App = () => {
             } else if (message.type === 'event' && message.data.messageType === 'update_results') {
                 console.log('Received update_context event:', message.data);
                 try {
-                    await updateReport(message.data.messagePayload as ReportPayload);
+                    if (message.data.messagePayload.publication_info) {
+                        const payload = {PROJECT_ID: message.data.messagePayload.PROJECT_ID, ...message.data.messagePayload.publication_info}
+                        await updateReport(payload as ReportPayload);
+                      } else 
+                        await updateReport(message.data.messagePayload as ReportPayload);
                 } catch (error) {
                     console.error('Failed to upsert report:', error);
                     // You might want to add some user feedback here

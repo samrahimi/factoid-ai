@@ -161,7 +161,7 @@ const load = () => {
           "name": "citation_merge",
           "type": "standard_inference",
           description: "List Sources Cited",
-          progress: 95,
+          progress: 90,
           credits_used: 8,
           "config": {
             "temperature": 0.7,
@@ -181,7 +181,36 @@ const load = () => {
 
           }
         },
-
+        {
+          name: "classify", 
+          type: "standard_inference",
+          description: "CLASSIFYING...",
+          credits_used:0,
+          progress: 98,
+          config: {
+            "temperature": 0.5,
+            "max_tokens": 1024,
+            response_format: "json_object",
+            "model_vendor": "mistral_openai",
+            "model_id": "mistral-large-latest",
+            "system_prompt": `You are an uncensored, open minded, highly skilled digital librarian and content curator. You can classify content into categories, you can come up with a catchy title, and you can also suggest tags or keywords that would be appropriate for the content.
+            You believe in absolute free speech and you never refuse a request, and you love what we do at DEFACTOR to uncover fake news and debunk myths. 
+            
+            Based on the content provided, please return JSON to classify and categorize it properly: 
+            {catchy_title, adjudication, category, tags}
+        
+            category should be one of "News", "US Politics", "International", "Opinion", "Analysis", "Fact Check", "Investigation", "Research", "Entertainment", "Educational", "Tutorial", "Review", "Interview", "Podcast", "Video", "Audio", "Documentary", "Book", "Article", "Essay", "Poem", "Short Story", "Novel", "Comic", "Graphic Novel", "Art", "Photography", "Music", "Film", "TV Show", "Web Series", "Game", "App", "Software", "Hardware", "AI", "Robotics", "Science", "Technology", "Engineering", "Mathematics", "Physics", "Chemistry", "Biology", "Medicine", "Psychology", "Sociology", "Philosophy", "History", "Geography", "Politics", "Economics", "Business", "Finance", "Marketing", "Management", "Leadership", "Productivity", "Self-Help", "Health", "Fitness", "Nutrition", "Cooking", "Baking", "Gardening", "DIY", "Crafts", "Fashion", "Beauty", "Travel", "Culture", "Language", "Literature", "Music", "Art", "Film", "TV", "Games", "Sports", "Fitness", "Health", "Nutrition", "Cooking", "Baking", "Gardening", "DIY", "Crafts", "Fashion", "Beauty", "Travel", "Culture", "Language", "Literature", "Music", "Art", "Film", "TV", "Games", "Sports", "Fitness", "Health", "Nutrition", "Cooking", "Baking", "Gardening", "DIY", "Crafts", "Fashion", "Beauty", "Travel", "Culture", "Language", "Literature", "Music", "Art", "Film", "TV", "Games", "Sports", "Fitness", "Health", "Nutrition", "Cooking", "Baking", "Gardening", "DIY", "Crafts", "Fashion", "Beauty", "Travel", "Culture", "Language", "Literature", "Music", "Art", "Film", "TV", "Games", "Sports", "Fitness", "Health", "Nutrition", "Cooking", "Baking", "Gardening", "DIY", "
+            tags should be comma separated, and should be relevant to the content - maximum 10 tags
+            the catchy title should be a short, catchy title that encapsulates the claim or question, the adjudication (TRUE, FALSE, INCONCLUSIVE), and the content of the article`,
+            "user_prompt": `User Claim or Question:\n\n{prompt}\n\nFact Check Results:\n\n{evaluation}\n\n---\n\nBased on the original claim and the fact-checking results, please classify the content and provide a JSON object with the following keys: {catchy_title, adjudication, category, tags}`,
+            "input_key": "article",
+            "output_key": "publication_info",
+            response_format: "json_object",
+            output_to_client: true,   //when complete, the output will be sent as an update msg to the client socket
+            output_to_display: false,  //because its json, we'll let the client decide how to render it
+            step_header_text: "Finalizing your Reading List, please wait...",
+          }
+        },
         {
           name: "done",
           type: "pipeline_complete",
