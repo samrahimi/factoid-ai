@@ -9,6 +9,9 @@ import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw'
 import remarkRehype from 'remark-rehype'
 export default function Home() {
+  location.href = '/beta'
+  return false
+  
   const [models, setModels] = useState<string[]>([]);
   const [selectedModel, setSelectedModel] = useState('truth');
   const [prompt, setPrompt] = useState(`Write a long-form human interest piece about the Japanese fishermen who are notorious for the drive hunting of dolphins at the cove... We want to understand who these people are, how they ended up hunting dolphins for a living, why they continue in the face of fierce opposition, and what they think the future holds. Be as open minded and unbiased as possible, and look at the matter from a diverse array of perspectives`);

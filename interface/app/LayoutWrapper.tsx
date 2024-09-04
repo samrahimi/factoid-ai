@@ -49,7 +49,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
       <header className="bg-gray-800 shadow-sm">
         <div className="fixed top-0 left-0 right-0 bg-gray-900 px-4 py-6 sm:px-6 lg:px-8 z-10">
           <nav className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-gray-100">FACTOID.AI</h1>
+            <h1 className="text-2xl font-bold text-gray-100">de<span className='text-teal-500'>fact</span></h1>
             <div>
                 <Link href="/beta" className="text-gray-300 hover:text-gray-100 mx-2">Home</Link>
               <Link href="/beta/my-reports" className="text-gray-300 hover:text-gray-100 mx-2">My Reports</Link>
