@@ -1,4 +1,29 @@
 import { supabase } from './supabaseClient';
+export type Report ={
+  id: string;
+  project_id: string;
+  created_at: string;
+  user_request: string;
+  claim?: string;
+  evaluation?: string;
+  category?: string;
+  cover_image?: string 
+  parsed?: 
+  {
+    project_id: string
+    evaluation: string;
+    article: string;
+    bibliography: any;
+    works_cited: any;
+    related_questions: any;
+    image_urls: any
+    catchy_title: any
+    adjudication: any
+    category: any
+    tags: any
+    publication_info: any
+    };
+}
 
 export interface ReportPayload {
   project_id: string;
@@ -21,7 +46,33 @@ export interface ReportPayload {
     
   [key: string]: any; // Allow for additional properties
 }
-export async function getReports(userId, autoParseMetadata = true) {
+
+export async function getReport(projectId: string, autoParseMetadata = true)  {
+  const { data, error } = await supabase
+    .from('reports')
+    .select('*')
+    .eq('project_id', projectId);
+
+  if (error) throw error;
+
+  const reviver = (key: string, value: any) => {
+    if (key === 'PROJECT_ID') {
+      return { project_id: value };
+    } else {
+      return {key: value}
+    }
+    //return value;
+  };
+
+  const report = {
+    ...data[0],
+    parsed: JSON.parse(data[0].metadata)
+  };
+  return report;
+}
+
+
+export async function getReports(userId: string, autoParseMetadata = true) {
   const { data, error } = await supabase
     .from('reports')
     .select('*')
@@ -104,8 +155,11 @@ export async function updateReport(payload: ReportPayload) {
     if (payload.image_urls !== undefined && existingRecord.image_urls === null) {
       updateData.image_urls = payload.image_urls;
     }
-    // Always update the metadata with the full payload
-    updateData.metadata = JSON.stringify(payload);
+    //Merge the metadata!
+    const existingMetadata = existingRecord.metadata !== null ? JSON.parse(existingRecord.metadata) : {};
+    const newMetadata = payload;
+    updateData.metadata = JSON.stringify({...existingMetadata, ...newMetadata});
+
     // Add timestamp for the update
     updateData.updated_at = new Date().toISOString();
     // Get the current user's ID
@@ -134,7 +188,8 @@ export async function insertReport(payload: ReportPayload) {
   // Add timestamp for the update
   payload.updated_at = new Date().toISOString();
   payload.created_at = new Date().toISOString();
-  payload.cover_image= payload?.image_urls ? payload.image_urls[0] : null;
+  payload.cover_image= payload.image_urls ? payload.image_urls[0] : undefined
+
 
 
   // Get the current user's ID

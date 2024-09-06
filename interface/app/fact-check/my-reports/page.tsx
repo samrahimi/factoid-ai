@@ -1,33 +1,12 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { supabase } from '../../../lib/supabaseClient';
-import * as reportService from '../../../lib/reports';
+import { supabase } from '@/lib/supabaseClient';
+import * as reportService from '@/lib/reports';
 import ReactMarkdown from 'react-markdown';
-import ReportDetails from './ReportDetails';
-
-interface Report {
-  id: string;
-  created_at: string;
-  user_request: string;
-  claim?: string;
-  evaluation?: string;
-  category?: string;
-  cover_image?: string 
-  parsed?: {
-    evaluation: string;
-    article: string;
-    bibliography: any;
-    works_cited: any;
-    related_questions: any;
-    image_urls: any
-    catchy_title: any
-    adjudication: any
-    category: any
-    tags: any
-    publication_info: any
-    };
-}
+import ReportDetails from '@/components/ReportDetails';
+import { Report } from '@/lib/reports';
+import Link from 'next/link';
 
 export default function MyReportsPage() {
   const [reports, setReports] = useState<Report[]>([]);
@@ -105,6 +84,11 @@ export default function MyReportsPage() {
             </div>
             <div className="p-4">
               <ReportDetails data={selectedReport.parsed} />
+
+              <p className='text-gray-300 mt-4'>Permalink: <Link target="_blank" href={`/fact-check/report/${selectedReport.project_id}`} className="text-blue-400 hover:underline">{`/fact-check/report/${selectedReport.project_id}`} </Link></p>
+              <pre>
+                {JSON.stringify(selectedReport.parsed, null, 2)}
+              </pre>
             </div>
           </div>
         </div>

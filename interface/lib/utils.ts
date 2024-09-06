@@ -1,6 +1,11 @@
 import { Remarkable } from 'remarkable';
 import { linkify } from 'remarkable/linkify';
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
 
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
 const getDangerousHtmlFromMarkdown = (markdownText) => {
     // Actual default values
     var md = new Remarkable({

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { useRouter } from 'next/navigation';
 
 export default function Auth() {
   const [loading, setLoading] = useState(false)
@@ -19,7 +20,9 @@ export default function Auth() {
       if (error) throw error
       
       if (!isLogin) {
-        alert('Check your email for the confirmation link!')
+        //alert('Check your email for the confirmation link!')
+        const router = useRouter();
+        router.push('/auth/edit-profile');
       }
     } catch (error) {
       alert(error.error_description || error.message)

@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';         
 import { UploadCloud, Link, FileText } from 'lucide-react';
-import FactCheckProgressScreen from './FactCheckProgressScreen';
+import FactCheckProgressScreen from '../../components/FactCheckProgressScreen';
 import { ReportPayload, updateReport } from '@/lib/reports';
 import { supabase } from '../../lib/supabaseClient';
 

@@ -25,11 +25,12 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
 
     checkAuth();
 
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(async(event, session) => {
       if (event === 'SIGNED_OUT' && pathname !== '/auth') {
         router.push('/auth');
       } else if (event === 'SIGNED_IN' && pathname === '/auth') {
-        router.push('/');
+        console.log(JSON.stringify(await supabase.auth.getUser()))
+        router.push('/fact-check');
       }
     });
 
@@ -51,8 +52,9 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
           <nav className="flex justify-between items-center">
             <h1 className="text-2xl font-bold text-gray-100">de<span className='text-teal-500'>fact</span></h1>
             <div>
-                <Link href="/beta" className="text-gray-300 hover:text-gray-100 mx-2">Home</Link>
-              <Link href="/beta/my-reports" className="text-gray-300 hover:text-gray-100 mx-2">My Reports</Link>
+                <Link href="/fact-check" className="text-gray-300 hover:text-gray-100 mx-2">New Factoid</Link>
+                <Link href="/fact-check/my-reports" className="text-gray-300 hover:text-gray-100 mx-2">My Factoids</Link>
+                <Link href="/auth/logout" className="text-gray-300 hover:text-gray-100 mx-2">Sign Out</Link>
             </div>
           </nav>
         </div>

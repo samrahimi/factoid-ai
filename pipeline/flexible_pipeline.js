@@ -406,7 +406,7 @@ const userRequest = process.argv[4];
 if (process.argv[5]) {
   const customProjectId  = process.argv[5].split(':')[1] //if we are running a sub-pipeline, we need to know the project ID
 
-  sendControlMessage("status", "Starting CHILD pipeline... events will update the parent project, output to parent context")
+  sendControlMessage("spawn", {text:"Starting CHILD pipeline... events will update the parent project, output to parent context"})
   runPipeline(configPath, userRequest, sessionId, customProjectId, true)
     .then(result => result)
     .catch(error => {process.stdout.write(error.message);});

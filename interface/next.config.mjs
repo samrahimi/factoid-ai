@@ -8,4 +8,8 @@ const nextConfig = {  typescript: {
   },
 };
 
+
+
+
 export default nextConfig;
+ 

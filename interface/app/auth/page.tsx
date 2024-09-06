@@ -12,7 +12,7 @@ export default function AuthPage() {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        router.push('/');
+        router.push('/fact-check');
       }
     };
 
