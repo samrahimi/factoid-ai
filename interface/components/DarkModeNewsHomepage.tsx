@@ -7,7 +7,7 @@ import Link from "next/link"
 
 export function DarkModeNewsHomepage() {
   return (
-    <div className="flex flex-col h-screen bg-black text-gray-100">
+    <div className="min-h-screen bg-black text-gray-100">
   
         <section className="py-12 md:py-24 lg:py-32 xl:py-48">
           <div className="container px-4 md:px-6">
@@ -15,13 +15,12 @@ export function DarkModeNewsHomepage() {
               <img
                 alt="Featured news image"
                 className="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last lg:aspect-square"
-                height="550"
-                src="/placeholder.svg?height=550&width=550"
-                width="550"
+                src="/placeholder.svg"
+                
               />
               <div className="flex flex-col justify-center space-y-4">
                 <div className="space-y-2">
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
+                  <h1 className="text-2xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
                     Breaking News: Major Climate Agreement Reached
                   </h1>
                   <p className="max-w-[600px] text-gray-400 md:text-xl">

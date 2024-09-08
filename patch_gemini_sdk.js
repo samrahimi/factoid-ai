@@ -1,3 +1,9 @@
+/* Purpose: This script is used to patch the Gemini SDK to include the new HarmCategory enum value "HARM_CATEGORY_CIVIC_INTEGRITY".
+   This harm category is supported by gemini-1.5-pro-exp-0827, gemini-1.5-flash-exp-0827 model.
+   Prerequisites: The Gemini SDK must be installed (npm install @google/generative-ai).
+   Usage: node patch_gemini_sdk.js (this file should be placed in the root of the project)
+*/
+
 const fs = require('fs').promises;
 const path = require('path');
 

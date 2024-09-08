@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import LayoutWrapper from './LayoutWrapper';
+import "./new.css";
 
+import LayoutWrapper from './LayoutWrapper';
+import LayoutWrapperCodeOnly from './LayoutWrapperCodeOnly';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -17,8 +18,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <LayoutWrapper>{children}</LayoutWrapper>
+      <body className={inter.className+" dark"}>
+        <LayoutWrapperCodeOnly>{children}</LayoutWrapperCodeOnly>
       </body>
     </html>
   );

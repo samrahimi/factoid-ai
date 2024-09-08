@@ -4,7 +4,7 @@ import { UploadCloud, Link, FileText } from 'lucide-react';
 import FactCheckProgressScreen from '../../components/FactCheckProgressScreen';
 import { ReportPayload, updateReport } from '@/lib/reports';
 import { supabase } from '../../lib/supabaseClient';
-
+import { Navigation } from '@/components/Navigation';
 const App = () => {
   const [currentScreen, setCurrentScreen] = useState('home');
   const [currentReport, setCurrentReport] = useState(null);
@@ -173,7 +173,7 @@ const App = () => {
 const HomeScreen = ({onSubmit}) => {
   const [text, setText] = useState(location.href.indexOf('?claim=') > 0 ? 
   decodeURIComponent(location.href.split('?claim=')[1]):
-  `Did we actually put a man on the moon?`);
+  ``);
   const [url, setUrl] = useState('');
 
   const handleSubmit = (e) => {
@@ -183,7 +183,8 @@ const HomeScreen = ({onSubmit}) => {
     onSubmit(combinedPrompt)
   };
 
-  return (
+  return (<>
+    <Navigation />
     <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <div className="px-4 py-6 sm:px-0">
         <h2 className="text-xl font-semibold mb-4 text-gray-100">Welcome to AI Fact Checker</h2>
@@ -254,6 +255,7 @@ const HomeScreen = ({onSubmit}) => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 

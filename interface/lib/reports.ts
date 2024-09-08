@@ -71,7 +71,52 @@ export async function getReport(projectId: string, autoParseMetadata = true)  {
   return report;
 }
 
+export async function getAllReports(autoParseMetadata = true) {
+  const { data, error } = await supabase
+    .from('reports')
+    .select('*')
+    .order('created_at', { ascending: false });
 
+  if (error) throw error;
+  if (autoParseMetadata) {
+    const enhancedData = data.map((x) => {
+      try {
+        return {
+          ...x,
+          parsed: JSON.parse(x.metadata)
+        }
+      } catch (ex) {
+        return {...x, parsed: null}
+      }
+    })
+    return enhancedData
+
+  } else 
+    return {...data, parsed: null};
+}
+
+export async function getGroupedReports(autoParseMetadata = true) {
+  const allReports = await getAllReports(autoParseMetadata);
+  //const parsedReports = allReports.map((x) => x.parsed)
+  const groupedReports = allReports.reduce((acc, curr) => {
+    if (curr?.parsed?.publication_info?.category === undefined) {
+      if (acc['Other']) {
+        acc['Other'].push(curr);
+      } else {
+        acc['Other'] = [curr];
+      }
+    } else {
+      if (acc[curr.parsed.publication_info.category]) {
+        acc[curr.parsed.publication_info.category].push(curr);
+      } else {
+        acc[curr.parsed.publication_info.category] = [curr];
+      }
+    }
+    return acc;
+  }, {});
+
+  return groupedReports
+}
 export async function getReports(userId: string, autoParseMetadata = true) {
   const { data, error } = await supabase
     .from('reports')

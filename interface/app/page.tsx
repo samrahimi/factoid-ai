@@ -1,11 +1,11 @@
 "use client"
 import React from 'react';
-import {DarkModeNewsHomepage} from '@/components/DarkModeNewsHomepage';
+import {HomeScreen} from '@/components/HomeScreen';
 
 const Page = () => {
     return (
-        <div className="container">
-            <DarkModeNewsHomepage />
+        <div className="container mx-auto">
+            <HomeScreen />
         </div>
     );
 };

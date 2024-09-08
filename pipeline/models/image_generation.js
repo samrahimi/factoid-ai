@@ -5,8 +5,8 @@ const generateImageFast= async(prompt, model, options) => {
   fal.config({
     credentials:process.env.FAL_KEY,
   });
-  
-  
+
+
   const FAL_KEY = process.env.FAL_KEY;
   const DEFAULT_MODEL='fal-ai/flux/schnell'
   const response = await fetch(`https://fal.run/${model || DEFAULT_MODEL}`, {
@@ -28,7 +28,7 @@ const generateImageFast= async(prompt, model, options) => {
   return response.json()
 
 }
-  
+
 
 
 /* Step 1 is deprecated... use the multiTool in step 1 instead, its considerably more robust */
@@ -60,14 +60,14 @@ function saveBase64Image(base64Image) {
       // Define the path to save the image
       const imagePath = require('path').join(process.env.IMAGE_STORAGE_FOLDER, randomFilename);
       const saved = saveBase64ImageToDisk(base64Image, imagePath)
-      return randomFilename       
+      return randomFilename
   }
-const load = () => { 
+const load = () => {
   return {
     "pipeline_name": "generate_image",
     "description": "Transforms a simple request into a beautiful image",
     "input": "The user's request",
-    "output": "The urls to the created images", 
+    "output": "The urls to the created images",
     "steps": [
       {
         "name": "generate_dalle_prompt",
@@ -94,7 +94,7 @@ const load = () => {
           "output_key": "image_urls",
           f: async(input, self, ctx) => {
             // for the free flux variants, the response is base64 encoded images
-            // if using flux pro, the response data shape is the same but the URLs 
+            // if using flux pro, the response data shape is the same but the URLs
             // are actual URLs to the images
             const imageGenResult = await generateImageFast(input.trim(), 'fal-ai/flux/schnell')
             let  image_paths=[]
@@ -103,11 +103,11 @@ const load = () => {
                 let relativePath =  saveBase64Image(img.url)
                 process.stdout.write(`\n\n![Generated Image](${process.env.IMAGE_SERVER_URL}/${relativePath})\n\n`)
                 image_paths.push(relativePath)
-              })             
+              })
             } catch(x) {process.stdout.write(x.toString())}
             return image_paths
           },
-          json_stdout_override: true, //we want to send the image url to the client
+          //json_stdout_override: true, //we want to send the image url to the client
           output_to_client: true,
           output_to_display: true,
         }
@@ -115,6 +115,6 @@ const load = () => {
     ]
   }
 }
-        
+
 
 module.exports = { load };
