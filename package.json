@@ -5,7 +5,7 @@
   "main": "api.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "next dev"
+    "postinstall": "node patch_gemini_sdk.js"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^0.0.41",
@@ -91,8 +91,6 @@
     "uuid": "^9.0.1",
     "ws": "^8.18.0",
     "zod": "^3.23.8"
-  },
-  "devDependencies": {
-    "patch-package": "^8.0.0"
   }
+
 }
