@@ -12,7 +12,7 @@ export default function Home() {
 
   const [models, setModels] = useState<string[]>([]);
   const [selectedModel, setSelectedModel] = useState('truth');
-  const [prompt, setPrompt] = useState(`Write a long-form human interest piece about the Japanese fishermen who are notorious for the drive hunting of dolphins at the cove... We want to understand who these people are, how they ended up hunting dolphins for a living, why they continue in the face of fierce opposition, and what they think the future holds. Be as open minded and unbiased as possible, and look at the matter from a diverse array of perspectives`);
+  const [prompt, setPrompt] = useState(``);
   const [bytes, setBytes] = useState(0);
   const [output, setOutput] = useState(' ');
   const [isLoading, setIsLoading] = useState(false);
@@ -85,8 +85,9 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
-      <h1 className="text-4xl font-bold mb-8">AI Research Assistant</h1>
+    <div className="container mx-auto bg-gray-900 text-gray-100 p-6 mt-24">
+      <h2 className="text-lg mb-6">Try Our Models</h2>
+      <p className="text-sm mb-4">These models are at varying stages of development and their use should be considered experimental. Outputs will not be saved on the server, so make sure to copy and paste</p>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label htmlFor="model" className="block text-sm font-medium mb-2">

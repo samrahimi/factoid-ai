@@ -52,29 +52,32 @@ export default function MyReportsPage() {
       {reports.length === 0 ? (
         <p className="text-gray-300">You haven't created any reports yet.</p>
       ) : (
-        <ul className="space-y-4">
-          {reports.map((report) => (
-            <li  
-              key={report.id}
-              onClick={() => handleReportClick(report)}
-              className="bg-gray-800 p-4 rounded-lg shadow cursor-pointer hover:bg-gray-700 transition-colors duration-200"
-            >
-              <img src={report.cover_image ? `${process.env.NEXT_PUBLIC_IMAGE_SERVER_URL}/${report.cover_image}` : "placeholder"} width="100%" alt="Placeholder" className=" rounded-lg mb-4" />
-              <div className="text-l font-semibold mb-2 text-gray-100 max-h-18 overflow-clip">{report.parsed?.publication_info?.catchy_title || report.claim}</div>
-              <p style={{}}  className="text-gray-300 mb-2 text-sm">Created: {new Date(report.created_at).toLocaleString()}</p>
-              <div style={{overflow:"hidden", height: "3rem"}}>
-              <ReactMarkdown>{report.evaluation}</ReactMarkdown>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
+                {reports.map((factoid) => (
+                  <div onClick={() => handleReportClick(factoid)} key={factoid.id} className="rounded-lg overflow-hidden">
+                    <img
+                      src={factoid.cover_image ? `${process.env.NEXT_PUBLIC_IMAGE_SERVER_URL}/${factoid.cover_image}` : "/placeholder.svg"}
+                      alt={factoid.claim}
+                      className="aspect-[3/2] object-cover"
+                    />
+                    <div className="p-4 bg-background">
+                      <h3 className="line-clamp-2 xl:line-clamp-1 text-lg font-semibold">
+                        {factoid?.parsed?.publication_info?.catchy_title || factoid.claim}
+                      </h3>
+                      <p className="text-muted-foreground line-clamp-3">{factoid.evaluation}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </li>
-          ))}
-        </ul>
-      )}
+        )}
+
 
       {isModalOpen && selectedReport && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-4xl max-h-full overflow-auto">
             <div className="flex justify-between items-center p-4 border-b border-gray-700">
-              <h2 className="text-xl font-medium text-gray-100">{selectedReport.claim}</h2>
+              <h2 className="text-xl font-medium text-gray-100">Original Query: {selectedReport.claim}</h2>
               <button
                 onClick={closeModal}
                 className="text-gray-400 hover:text-gray-200"

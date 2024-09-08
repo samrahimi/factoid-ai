@@ -6,7 +6,7 @@ import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/comp
 import { HomeIcon, NewspaperIcon, ClubIcon, BriefcaseIcon, CpuIcon, MenuIcon } from "lucide-react"
 export function Navigation() {
   return (
-      <header className="bg-background border-b px-4 flex items-center justify-between  h-14 sm:h-16">
+      <header className="bg-background border-b px-4 flex items-center justify-between    h-14 sm:h-16 fixed top-0 w-full z-10">
         <Link href="#" className="flex items-center gap-2" prefetch={false}>
           <NewspaperIcon className="h-6 w-6" />
           <span className="text-lg font-bold">defact</span>

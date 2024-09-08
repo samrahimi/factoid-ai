@@ -183,10 +183,8 @@ const HomeScreen = ({onSubmit}) => {
     onSubmit(combinedPrompt)
   };
 
-  return (<>
-    <Navigation />
-    <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-      <div className="px-4 py-6 sm:px-0">
+  return (
+      <div className="container mx-auto px-4 py-6 sm:px-0">
         <h2 className="text-xl font-semibold mb-4 text-gray-100">Welcome to AI Fact Checker</h2>
         <p className="mb-6 text-gray-300">Upload a document, paste text, or enter a URL to start fact-checking.</p>
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -254,8 +252,6 @@ const HomeScreen = ({onSubmit}) => {
           </div>
         </form>
       </div>
-    </div>
-    </>
   );
 };
 

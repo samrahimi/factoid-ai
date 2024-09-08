@@ -61,9 +61,7 @@ export function HomeScreen() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-[100dvh]">
-      <Navigation />
-      <main className="flex-1">
+    <>
         { featuredFactoid && (
         <section className="w-full px-4 py-6 sm:py-9 md:py-12 lg:py-16 xl:py-32">
           <div className="container grid grid-cols-1 gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
@@ -92,7 +90,7 @@ export function HomeScreen() {
               <div className="mb-6">
                 <h2 className="text-2xl font-bold">{category}</h2>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {items.map((factoid) => (
                   <div key={factoid.id} className="rounded-lg overflow-hidden">
                     <img
@@ -112,170 +110,20 @@ export function HomeScreen() {
             </div>
           </section>
         ))}
-        <section className="w-full px-4 py-6 sm:py-12 md:py-16 lg:py-24 xl:py-32 bg-muted">
-          <div className="container">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold">Top Stories</h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-              <div className="rounded-lg overflow-hidden">
-                <img src="/placeholder.svg" alt="News Article 1" className=" aspect-[3/2] object-cover" />
-                <div className="p-4 bg-background">
-                  <h3 className="line-clamp-2 xl:line-clamp-1 text-lg font-semibold">Tech Giants Announce Major Merger</h3>
-                  <p className="text-muted-foreground  line-clamp-3">
-                    Two of the largest tech companies in the world have announced a historic merger, creating a new
-                    industry powerhouse.
-                  </p>
-                </div>
-              </div>
-              <div className="rounded-lg overflow-hidden">
-                <img
-                  src="/placeholder.svg"
-                   
-                   
-                  alt="News Article 2"
-                  className=" aspect-[3/2] object-cover"
-                />
-                <div className="p-4 bg-background">
-                  <h3 className="line-clamp-2 xl:line-clamp-1 text-lg font-semibold">New Sustainable Energy Initiative Launched</h3>
-                  <p className="text-muted-foreground line-clamp-3">
-                    A coalition of government and private organizations have unveiled a comprehensive plan to transition
-                    to renewable energy sources.
-                  </p>
-                </div>
-              </div>
-              <div className="rounded-lg overflow-hidden">
-                <img
-                  src="/placeholder.svg"
-                   
-                   
-                  alt="News Article 3"
-                  className=" aspect-[3/2] object-cover"
-                />
-                <div className="p-4 bg-background">
-                  <h3 className="line-clamp-2 xl:line-clamp-1 text-lg font-semibold">Sports Team Wins Championship Title</h3>
-                  <p className="text-muted-foreground line-clamp-3">
-                    After a hard-fought season, the local sports team has emerged victorious, clinching the championship
-                    title.
-                  </p>
-                </div>
-              </div>
-              <div className="rounded-lg overflow-hidden">
-                <img
-                  src="/placeholder.svg"
-                   
-                   
-                  alt="News Article 4"
-                  className=" aspect-[3/2] object-cover"
-                />
-                <div className="p-4 bg-background">
-                  <h3 className="line-clamp-2 xl:line-clamp-1 text-lg font-semibold">Economic Outlook Remains Positive</h3>
-                  <p className="text-muted-foreground line-clamp-3">
-                    Despite global uncertainties, analysts are forecasting a continued positive trend in the economy.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section className="my-3 w-full px-4 py-6 sm:py-9 md:py-12 lg:py-16 bg-muted">
-          <div className="container">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold">US Politics</h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-              <div className="rounded-lg overflow-hidden">
-                <img
-                  src="/placeholder.svg"
-                   
-                   
-                  alt="News Article 1"
-                  className=" aspect-[3/2] object-cover"
-                />
-                <div className="p-4 bg-background">
-                  <h3 className="line-clamp-2 xl:line-clamp-1 text-lg font-semibold">Tech Giants Announce Major Merger</h3>
-                  <p className="text-muted-foreground line-clamp-3">
-                    Two of the largest tech companies in the world have announced a historic merger, creating a new
-                    industry powerhouse.
-                  </p>
-                </div>
-              </div>
-              <div className="rounded-lg overflow-hidden">
-                <img
-                  src="/placeholder.svg"
-                   
-                   
-                  alt="News Article 2"
-                  className=" aspect-[3/2] object-cover"
-                />
-                <div className="p-4 bg-background">
-                  <h3 className="line-clamp-2 xl:line-clamp-1 text-lg font-semibold">New Sustainable Energy Initiative Launched</h3>
-                  <p className="text-muted-foreground line-clamp-3">
-                    A coalition of government and private organizations have unveiled a comprehensive plan to transition
-                    to renewable energy sources.
-                  </p>
-                </div>
-              </div>
-              <div className="rounded-lg overflow-hidden">
-                <img
-                  src="/placeholder.svg"
-                   
-                   
-                  alt="News Article 3"
-                  className=" aspect-[3/2] object-cover"
-                />
-                <div className="p-4 bg-background">
-                  <h3 className="line-clamp-2 xl:line-clamp-1 text-lg font-semibold">Sports Team Wins Championship Title</h3>
-                  <p className="text-muted-foreground line-clamp-3">
-                    After a hard-fought season, the local sports team has emerged victorious, clinching the championship
-                    title.
-                  </p>
-                </div>
-              </div>
-              <div className="rounded-lg overflow-hidden">
-                <img
-                  src="/placeholder.svg"
-                   
-                   
-                  alt="News Article 4"
-                  className=" aspect-[3/2] object-cover"
-                />
-                <div className="p-4 bg-background">
-                  <h3 className="line-clamp-2 xl:line-clamp-1 text-lg font-semibold">Economic Outlook Remains Positive</h3>
-                  <p className="text-muted-foreground line-clamp-3">
-                    Despite global uncertainties, analysts are forecasting a continued positive trend in the economy.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-      <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
-        <p className="text-xs text-muted-foreground">&copy; 2024 News Site. All rights reserved.</p>
-        <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-          <Link href="#" className="text-xs hover:underline underline-offset-4" prefetch={false}>
-            Terms of Service
-          </Link>
-          <Link href="#" className="text-xs hover:underline underline-offset-4" prefetch={false}>
-            Privacy Policy
-          </Link>
-        </nav>
-      </footer>
-      <div className="fixed bottom-4 right-4 z-50">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button onClick={(e)=> location.href="/fact-check"} size="icon" className="rounded-full bg-primary text-primary-foreground">
-                <WandSparklesIcon className="h-6 w-6" />
-                <span className="sr-only">Ask a question or debunk a myth</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Ask a question or debunk a myth</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
-    </div>
+        <div className="fixed bottom-4 right-4 z-50">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button onClick={(e)=> location.href="/fact-check"} size="icon" className="rounded-full bg-primary text-primary-foreground">
+                  <WandSparklesIcon className="h-6 w-6" />
+                  <span className="sr-only">Ask a question or debunk a myth</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Ask a question or debunk a myth</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      </>
   )
 }
 
