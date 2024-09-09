@@ -163,6 +163,13 @@ export async function updateReport(payload: ReportPayload) {
   } else {
     const existingRecord = existingData[0];
     const updateData: any = {};
+    
+    //Merge the metadata! We do this first because we're often changing the schema of the metadata without changing the schema of the database
+    const existingMetadata = existingRecord.metadata !== null ? JSON.parse(existingRecord.metadata) : {};
+    const newMetadata = payload;
+    updateData.metadata = JSON.stringify({...existingMetadata, ...newMetadata});
+
+
     // Check each column's value against the payload
     if (payload.userRequest !== undefined && existingRecord.user_request === null) {
       updateData.user_request = payload.userRequest;
@@ -200,10 +207,6 @@ export async function updateReport(payload: ReportPayload) {
     if (payload.image_urls !== undefined && existingRecord.image_urls === null) {
       updateData.image_urls = payload.image_urls;
     }
-    //Merge the metadata!
-    const existingMetadata = existingRecord.metadata !== null ? JSON.parse(existingRecord.metadata) : {};
-    const newMetadata = payload;
-    updateData.metadata = JSON.stringify({...existingMetadata, ...newMetadata});
 
     // Add timestamp for the update
     updateData.updated_at = new Date().toISOString();
@@ -213,6 +216,7 @@ export async function updateReport(payload: ReportPayload) {
       updateData.user_id = user.id;
     } else {
       console.warn('No authenticated user found when updating report');
+      return {error: 'No authenticated user found when updating report'};
     }
     const { data: updateResult, error: updateError } = await supabase
       .from('reports')

@@ -20,10 +20,10 @@ const ReportDetails = ({ data }) => {
   const [activeTab, setActiveTab] = useState('evaluation');
 
   const tabs = [
-    { id: 'evaluation', label: 'Result' },
-    { id: 'article', label: 'Article' },
-    { id: 'worksCited', label: 'Sources' },
-    { id: 'relatedClaims', label: 'Related' },
+    { id: 'evaluation', label: 'At A Glance' },
+    { id: 'article', label: 'In Depth' },
+    { id: 'worksCited', label: 'Learn Next' },
+    //{ id: 'relatedClaims', label: 'Related' },
   ];
 
   const renderTabContent = () => {
@@ -36,8 +36,13 @@ const ReportDetails = ({ data }) => {
         return (
           <div dangerouslySetInnerHTML={{ __html: getDangerousHtmlFromMarkdown(data.article.replace("\n", "\n\n")) }} className="markdown-body dark" />
         );
+        // return <ReactMarkdown remarkPlugins={[remarkGfm]}>{data.article}</ReactMarkdown>;
       case 'worksCited':
-        return <WorksCited data={data.bibliography} />;
+        return <>
+          <WorksCited readingList={data.bibliography} />
+          <RelatedClaims data={data.related_questions} /> 
+        </>;
+      //deprecated... we've combined worksCited and relatedClaims into one tab
       case 'relatedClaims':
         return <RelatedClaims data={data.related_questions} />;
       default:

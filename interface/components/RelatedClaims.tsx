@@ -1,24 +1,24 @@
 import React from 'react';
 
 const RelatedClaims = ({ data }) => {
-  const { related_claims } = data;
+  const { suggested_queries } = data;
 
   const handleClaimClick = (claim) => {
-    window.location.href=`/beta?claim=${encodeURIComponent(claim)}`
+    window.location.href=`/fact-check?claim=${encodeURIComponent(claim)}`
   };
 
   return (
     <div className="markdown-body dark bg-gray-800 rounded-lg shadow-lg">
       <h2 className="mb-4">Related Claims</h2>
       <div className="space-y-2">
-        {related_claims.map((claim, index) => (
+        {suggested_queries.map((query, index) => (
             <div>
           <a
             key={index}
-            onClick={() => handleClaimClick(claim)}
+            onClick={() => handleClaimClick(query)}
             className="text-gray-300 cursor-pointer hover:text-blue-400 transition-colors duration-200"
           >
-            {claim}
+            {query}
           </a></div>
         ))}
       </div>
