@@ -21,7 +21,7 @@ export default function AuthPage() {
       }
     };
 
-    checkAuth();
+    //checkAuth();
   }, [router]);
 
   return <Auth />;
