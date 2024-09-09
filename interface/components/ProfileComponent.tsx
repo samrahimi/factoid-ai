@@ -70,7 +70,7 @@ const ProfileComponent = () => {
 
 return (
     <div className="bg-gray-900 text-white min-h-screen flex items-center justify-center">
-        <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
+        <div className="lg:bg-gray-800 p-8 mx-auto mt-auto mb-auto lg:rounded-lg lg:shadow-lg w-full max-w-md">
             <h2 className="text-2xl mb-6 text-center">My Public Profile</h2>
             <p className="text-center text-sm text-gray-300 my-6">The information below will be associated with any Factoids that you create. Pseudonyms are allowed</p>
             <form onSubmit={handleSubmit} className="space-y-4">
