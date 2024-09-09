@@ -7,6 +7,8 @@ export default function Auth() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLogin, setIsLogin] = useState(true)
+  const router = useRouter();
+
 
   const handleAuth = async (e) => {
     e.preventDefault()
@@ -21,8 +23,9 @@ export default function Auth() {
       
       if (!isLogin) {
         //alert('Check your email for the confirmation link!')
-        const router = useRouter();
         router.push('/auth/edit-profile');
+      } else {
+        router.push('/fact-check/my-reports');
       }
     } catch (error) {
       alert(error.error_description || error.message)

@@ -25,7 +25,7 @@ export default function ReportDetailPage({ params }) {
       <div className="text-l font-semibold mb-2 text-gray-100 max-h-18 overflow-clip">{report?.parsed.publication_info?.catchy_title || report?.claim}</div>
       <p className="text-gray-300 mb-2 text-sm">Created: {new Date(report?.created_at).toLocaleString()}</p>
 
-      <ReportDetails data={report?.parsed} />
+      <ReportDetails data={report?.parsed} tabs="false" />
 
     </>
     )

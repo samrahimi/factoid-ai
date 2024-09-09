@@ -134,7 +134,8 @@ async function runPipeline(configPath, userRequest, sessionId, customProjectId, 
     //if the step has an output key, and is set to output to the client, we send the result back to the client
     if (step.config.output_to_client && step.config.output_key) {
       clientContext[step.config.output_key] = context[step.config.output_key]
-      sendControlMessage("update_results",clientContext)
+      //sendControlMessage("update_results",clientContext)
+      sendControlMessage("update_results",context)
     }
   }
 
