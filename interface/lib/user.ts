@@ -54,27 +54,24 @@ const getCurrentUser = async () => {
         const { data: { user } } = await supabase.auth.getUser();
         return user
     };
-async function getUserProfile(): Promise<Profile> {
-    // Get the current user
-    const user = await getCurrentUser();
-
-
-    if (!user) {
-        console.log('No user is logged in');
-        return null;
-    }
+async function getUserProfile(uid) {
 
     // Fetch the profile for the current user
     const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', user.id) // Assuming the profile id matches the user id
+        .eq('id', uid) // Assuming the profile id matches the user id
         .single(); // Use .single() if you expect only one profile
 
     if (profileError) {
         console.error('Error fetching profile:', profileError);
     }
-
+    if (!profile.username) {
+        profile.username = "User-"+Math.random().toString(36).substring(7);
+        profile.full_name = "Anonymous"
+        await updateUserProfile(profile)
+        return profile;
+    }
     return profile;
 
     console.log('User Profile:', profile);
@@ -94,8 +91,8 @@ const updateUserProfile= async (profile: Profile) => {
 }
 
 const uploadAvatar = async (file: File) => {
-
-    const profile= await getUserProfile()
+    const user = await getCurrentUser()
+    const profile= await getUserProfile(user.id)
     if (!profile) {
         console.error('No profile found');
         return;
@@ -117,8 +114,12 @@ const uploadAvatar = async (file: File) => {
         const avatarUrl = `${data.publicUrl}`;
         profile.avatar_url = avatarUrl;
         await updateUserProfile(profile);
+        return profile
+
     } else {
         console.error('Error uploading avatar:', error);
+        return null
+        
     }
 }
 export { getCurrentUser, getUserProfile, updateUserProfile, uploadAvatar };

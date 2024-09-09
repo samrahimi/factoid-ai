@@ -25,7 +25,7 @@ export default function Auth() {
         //alert('Check your email for the confirmation link!')
         router.push('/auth/edit-profile');
       } else {
-        router.push('/fact-check/my-reports');
+        router.push('/');
       }
     } catch (error) {
       alert(error.error_description || error.message)

@@ -9,22 +9,22 @@ const ProfileComponent = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter()
+  const fetchProfile = async () => {
+    try {
+      const user = await getCurrentUser();
+      if (user) {
+        const userProfile = await getUserProfile(user.id);
+        setProfile(userProfile);
+        return userProfile
+      }
+    } catch (err) {
+      setError('Failed to load profile');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const user = await getCurrentUser();
-        if (user) {
-          const userProfile = await getUserProfile();
-          setProfile(userProfile || { id: user.id });
-        }
-      } catch (err) {
-        setError('Failed to load profile');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchProfile();
   }, []);
 
@@ -54,9 +54,10 @@ const ProfileComponent = () => {
     const file = e.target.files?.[0];
     if (file) {
       try {
-        await uploadAvatar(file);
-        const updatedProfile = await getUserProfile();
+        const updatedProfile= await uploadAvatar(file);
         setProfile(updatedProfile);
+        //const updatedProfile= await fetchProfile();
+        //setProfile(updatedProfile);
       } catch (err) {
         setError('Failed to upload avatar');
       }
@@ -70,7 +71,8 @@ const ProfileComponent = () => {
 return (
     <div className="bg-gray-900 text-white min-h-screen flex items-center justify-center">
         <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
-            <h2 className="text-2xl mb-6 text-center">Create/Edit Profile</h2>
+            <h2 className="text-2xl mb-6 text-center">My Public Profile</h2>
+            <p className="text-center text-sm text-gray-300 my-6">The information below will be associated with any Factoids that you create. Pseudonyms are allowed</p>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                     <label htmlFor="username" className="block mb-1">Username</label>
@@ -129,6 +131,12 @@ return (
                 >
                     Save Profile
                 </button>
+
+                <p className="mt-6 text-center">
+                <a href="/fact-check" className="text-blue-400 hover:underline">I'll Do This Later</a>
+
+                </p>
+
             </form>
         </div>
     </div>

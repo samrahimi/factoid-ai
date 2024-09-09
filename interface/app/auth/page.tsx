@@ -8,21 +8,21 @@ import { UserResponse } from '@supabase/supabase-js';
 
 export default function AuthPage() {
 
-  const router = useRouter();
+  // const router = useRouter();
 
-  useEffect(() => {
+  // useEffect(() => {
   
-    const checkAuth = async () => {
-      const user: UserResponse = await supabase.auth.getUser();
-      //const { data: { session } } = await supabase.auth.getSession();
-      if (user.data?.user)
-     {
-        router.push('/');
-      }
-    };
+  //   const checkAuth = async () => {
+  //     const user: UserResponse = await supabase.auth.getUser();
+  //     //const { data: { session } } = await supabase.auth.getSession();
+  //     if (user.data?.user)
+  //    {
+  //       router.push('/');
+  //     }
+  //   };
 
-    checkAuth();
-  }, [router]);
+  //   checkAuth();
+  // }, [router]);
 
   return <Auth />;
 }
