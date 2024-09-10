@@ -6,7 +6,17 @@ const nextConfig = {  typescript: {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
-  reactStrictMode: false
+  reactStrictMode: false,
+  images: {
+    remotePatterns: [
+      {
+        protocol:'https',
+        hostname: '**.supabase.co',
+        port: '443',
+        pathname: '**',
+      },
+    ],
+  },
 
 };
 

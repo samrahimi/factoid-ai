@@ -127,18 +127,29 @@ const load = () => {
         toggle_text: "Further Reading",
 
         "config": {
+
+          /*
           "temperature": 0.3,
           "max_tokens": 2048,
           "model_vendor": "cohere",
           "model_id": "command-r-plus",
+          */
+         
+          "temperature": 0.5,
+          //"model_vendor": "cohere",
+          //"model_id": "command-r-plus",
+          model_vendor: "google",
+          model_id: "gemini-1.5-flash-exp-0827",
+
+
           tool_options: {
             //citationQuality: "fast",
-            web: false,
-            appendCitationsToMarkdownStream: false,
+            //web: false,
+            //appendCitationsToMarkdownStream: false,
             use_cached_documents: true
           },
-          "system_prompt": "Briefly summarize each source document in a few sentences in the context of the user's claim and the fact checker's analysis, so that the user can pursue further reading on their own. Please write 1 paragraph per source and make sure each summary includes a link to the source using markdown.",
-          "user_prompt": "Claim:\n\n{claim}\n\n---\n\nAnalysis:\n\n{evaluation}",
+          "system_prompt": "Briefly summarize each source document in a few sentences in the context of the user's query and the fact checker's analysis, so that the user can pursue further reading on their own. Please write 1 paragraph per source and make sure each summary includes a link to the source using markdown.",
+          "user_prompt": "Source Documents:\n\n{__documents__}\n\n---\n\nUser Query:\n\n{claim}\n\n---\n\nAnalysis:\n\n{evaluation}",
           "input_key": "evaluation",
           "output_key": "bibliography",
           output_to_client: true,

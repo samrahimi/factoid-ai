@@ -2,6 +2,20 @@ import { Remarkable } from 'remarkable';
 import { linkify } from 'remarkable/linkify';
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { getAllReports } from './reports';
+
+export async function useTags() {
+  return {tags: []}
+  const reports = await getAllReports();
+  //count the frequency of each tag
+  
+  const tags = reports.flatMap(report => report?.parsed?.publication_info?.tags.split(",") || ['untagged'])
+  const uniqueTags = [...new Set(tags)]
+  const tagsWithReports = uniqueTags.map(tag => ({tag:tag, reports: reports.filter(report => report.parsed.publication_info.tags.includes(tag.tag))}))
+
+  return {tags: tagsWithReports}
+  //return [...new Set(tagCounts)]
+}
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))

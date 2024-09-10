@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { supabase } from '../lib/supabaseClient';
 import Link from 'next/link';
 import {Navigation} from '@/components/Navigation';
+import { MyAccountDropdown } from '@/components/MyAccountDropdown';
 export default function LayoutWrapperCodeOnly({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -47,9 +48,11 @@ export default function LayoutWrapperCodeOnly({ children }: { children: React.Re
 
   //Use this to add auth logic without changing the layout
   return (
+  <>
     <div className="flex flex-col min-h-[100dvh]">
+
     <Navigation />
-    <main className="flex-1">
+    <main className="flex-1 bg-background">
       {children}
     </main>
     <footer className="hidden flex flex-col fixed bottom-0 bg-background z-10 gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
@@ -64,6 +67,6 @@ export default function LayoutWrapperCodeOnly({ children }: { children: React.Re
         </nav>
       </footer>
 
-    </div>
+    </div></>
   );
 }

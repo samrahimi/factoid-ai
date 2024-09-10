@@ -1,6 +1,8 @@
 import { supabase } from './supabaseClient';
+import { getUserProfile } from './user';
 export type Report ={
   id: string;
+  user_id: string
   project_id: string;
   created_at: string;
   user_request: string;
@@ -95,6 +97,28 @@ export async function getAllReports(autoParseMetadata = true) {
     return {...data, parsed: null};
 }
 
+
+export const groupFactoidsByCategory = (factoids: Report[]) => {
+  const groupedReports = factoids.reduce((acc, curr) => {
+    if (curr?.parsed?.publication_info?.category === undefined) {
+      if (acc['Other']) {
+        acc['Other'].push(curr);
+      } else {
+        acc['Other'] = [curr];
+      }
+    } else {
+      if (acc[curr.parsed.publication_info.category]) {
+        acc[curr.parsed.publication_info.category].push(curr);
+      } else {
+        acc[curr.parsed.publication_info.category] = [curr];
+      }
+    }
+    return acc;
+  }, {});
+
+  return groupedReports
+
+}
 export async function getGroupedReports(autoParseMetadata = true) {
   const allReports = await getAllReports(autoParseMetadata);
   //const parsedReports = allReports.map((x) => x.parsed)
@@ -227,6 +251,13 @@ export async function updateReport(payload: ReportPayload) {
     return updateResult;
   }
 }
+
+export async function getPublicAuthorProfile(report) {
+  const profile = await getUserProfile(report.user_id, true);
+  return profile; //Protect the user's privacy... we shouldn't really be exposing this on client side, but it's a demo
+
+}
+
 //call this at the end of the pipeline... the image URLs should be already present, naturally
 export async function insertReport(payload: ReportPayload) {
   
@@ -266,6 +297,15 @@ return await supabase
       metadata: JSON.stringify(payload),
     })
 
+}
+
+export enum Factuality {
+  UNKNOWN = 'INCONCLUSIVE',
+  TRUE = 'TRUE',
+  FALSE = 'FALSE',
+  MIXED = 'MIXED',
+  MOSTLY_TRUE = 'MOSTLY TRUE',
+  MOSTLY_FALSE = 'MOSTLY FALSE',
 }
 
 // export async function upsertReportToSupabase(payload: ReportPayload) {

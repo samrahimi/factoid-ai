@@ -54,8 +54,9 @@ const getCurrentUser = async () => {
         const { data: { user } } = await supabase.auth.getUser();
         return user
     };
-async function getUserProfile(uid) {
-
+async function getUserProfile(uid, idempotent=false) {
+    alert(uid)
+    console.log('Fetching user profile for user:', uid);
     // Fetch the profile for the current user
     const { data: profile, error: profileError } = await supabase
         .from('profiles')
@@ -69,12 +70,12 @@ async function getUserProfile(uid) {
     if (!profile.username) {
         profile.username = "User-"+Math.random().toString(36).substring(7);
         profile.full_name = "Anonymous"
-        await updateUserProfile(profile)
+        if (!idempotent)
+            await updateUserProfile(profile)
         return profile;
     }
     return profile;
 
-    console.log('User Profile:', profile);
 }
 
 const updateUserProfile= async (profile: Profile) => {

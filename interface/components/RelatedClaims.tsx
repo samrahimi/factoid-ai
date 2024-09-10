@@ -8,9 +8,9 @@ const RelatedClaims = ({ data }) => {
   };
 
   return (
-    <div className="markdown-body dark bg-gray-800 rounded-lg shadow-lg">
+    <div className="markdown-body dark bg-gray-800">
       <h2 className="mb-4">Ask Next</h2>
-      <p className="text-gray-300 text-sm">Here are some other questions you might be interested in. Click any of the following, and our intelligent agents will perform a full investigation</p>
+      <p className="text-gray-300 text-sm font-italic">Here are some other questions you might be interested in. Click any of the following, and our intelligent agents will perform a full investigation</p>
       <div className="space-y-2">
         {suggested_queries.map((query, index) => (
             <div>
