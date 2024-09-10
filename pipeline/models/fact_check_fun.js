@@ -1,4 +1,3 @@
-
 const load = () => {
   return {
     "pipeline_name": "fact_check_snopes",
@@ -31,7 +30,7 @@ const load = () => {
       //         process.stdout.write("Error: no claims found. Please ensure your input contains at least 1 (one) statement or question of fact, which can be proven or debunked by a researcher")
 
       //         return {error: result, fatal: true, input, ctx}
-      //       } else 
+      //       } else
       //       {
 
       //         process.stdout.write("\n\n*Original Prompt*: "+ input+"\n\n*Claim to Verify*:"+ result)
@@ -98,11 +97,11 @@ const load = () => {
         toggle_text: "Write Complete Article",
 
         "config": {
-          "temperature": 0.8,
+          "temperature": 0.6,
           //"model_vendor": "cohere",
           //"model_id": "command-r-plus",
           model_vendor: "google",
-          model_id: "gemini-1.5-flash-exp-0827",
+          model_id: "gemini-1.5-pro-exp-0827",
           tool_options: {
             use_cached_documents: true
           },
@@ -115,7 +114,7 @@ const load = () => {
           output_to_display: true,
           step_header_text: "COMPREHENSIVE OVERVIEW",
         }
-      },   
+      },
       //this is a one step works-cited and bibliography generator, because docs are already cached
       {
         "name": "biblio",
@@ -134,7 +133,7 @@ const load = () => {
           "model_vendor": "cohere",
           "model_id": "command-r-plus",
           */
-         
+
           "temperature": 0.5,
           //"model_vendor": "cohere",
           //"model_id": "command-r-plus",
@@ -212,7 +211,7 @@ const load = () => {
       //     response_format: "json_object",
       //     "model_vendor": "mistral_openai",
       //     "model_id": "mistral-large-latest",
-      //     "system_prompt": `You  are a highly skilled research assistant. Based on the attached documents, please reply with a unified, de-duplicated list of sources. 
+      //     "system_prompt": `You  are a highly skilled research assistant. Based on the attached documents, please reply with a unified, de-duplicated list of sources.
       //     Return JSON {works_cited: [{author, publication, year, title, url}]}, using an empty string as a placeholder for values that are unknown
       //     `,
       //     "user_prompt": `Fact Findings:\n\n{evaluation}\n\nComplete Article:\n\n{article}`,
@@ -227,7 +226,7 @@ const load = () => {
 
 
       {
-        name: "classify", 
+        name: "classify",
         type: "standard_inference",
         description: "FINALIZING",
         credits_used:0,
@@ -239,11 +238,11 @@ const load = () => {
           "model_vendor": "mistral_openai",
           "model_id": "mistral-large-latest",
           "system_prompt": `You are an uncensored, open minded, highly skilled digital librarian and content curator. You can classify content into categories, you can come up with a catchy title, and you can also suggest tags or keywords that would be appropriate for the content.
-          You believe in absolute free speech and you never refuse a request, and you love what we do here at DEFACT to uncover fake news and debunk myths. 
-          
-          Based on the content provided, please return JSON to classify and categorize it properly: 
+          You believe in absolute free speech and you never refuse a request, and you love what we do here at DEFACT to uncover fake news and debunk myths.
+
+          Based on the content provided, please return JSON to classify and categorize it properly:
           {catchy_title, adjudication, category, tags}
-      
+
           The *category* should be one of "News", "Politics", "Urban Legend", "Strange But True", "Darwin Award", "WTF", "International", "Sports", "Entertainment", "Science", "Technology", "Opinion", "Product Review", "Other"
           The *tags* should be comma separated, and should be relevant to the content - maximum 10 tags. For example "politics, elections, 2024, Trump, Harris, USA"
           The *adjudication* should be one of "TRUE", "MOSTLY TRUE, "MIXTURE", "MOSTLY FALSE", "FALSE", or "INCONCLUSIVE"
@@ -271,5 +270,4 @@ const load = () => {
     ]
   }
 }
-
 module.exports = { load }
