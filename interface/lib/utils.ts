@@ -27,7 +27,7 @@ const getDangerousHtmlFromMarkdown = (markdownText) => {
         xhtmlOut:     true,        // Use '/' to close single tags (<br />)
         breaks:       true,        // Convert '\n' in paragraphs into <br>
         langPrefix:   'language-',  // CSS language prefix for fenced blocks
-    
+        linkify:      true,        // Autoconvert URL-like text to links
         // Enable some language-neutral replacement + quotes beautification
         typographer:  false,
     
@@ -39,8 +39,15 @@ const getDangerousHtmlFromMarkdown = (markdownText) => {
         // or '' if the source string is not changed
         highlight: function (/*str, lang*/) { return ''; }
     }).use(linkify);
+    const dangerousHTML= md.render(markdownText)
+    return     dangerousHTML.replace('FALSE', '<span class="font-bold text-red-500">FALSE</span>')
+    .replace('TRUE', '<span class="font-bold text-green-500">TRUE</span>')
+    .replace('MIXTURE', '<span class="font-bold text-yellow-500">MIXTURE</span>')
+    .replace('MOSTLY TRUE', '<span class="font-bold text-green-500">MOSTLY TRUE</span>')
+    .replace('MOSTLY FALSE', '<span class="font-bold text-red-500">MOSTLY FALSE</span>')
+    .replace('INCONCLUSIVE', '<span class="font-bold text-yellow-500">INCONCLUSIVE</span>')
+    .replace('OPINION', '<span class="font-bold text-yellow-500">OPINION</span>') 
 
-    return md.render(markdownText)
   
 }
 

@@ -67,7 +67,7 @@ export const MyAccountDropdown = ({isSideMenu}) => {
       <DropdownMenuTrigger asChild>
         {profile ? (
           <div className="flex items-center gap-5 max-w-80 p-2 bg-background cursor-pointer">
-            <img src={profile.avatar_url} alt="User Avatar" className="h-8 w-8 rounded-full" />
+            <img src={profile.avatar_url || '/placeholder.svg'} alt="User Avatar" className="h-8 w-8 rounded-full" />
             <span className="font-semibold text-teal-500">{profile.username}</span>
           </div>
         ) : (

@@ -98,7 +98,7 @@ export function HomeScreen() {
       {featuredFactoid && (
         <HeroSection imageUrl={featuredFactoid.cover_image ? `${process.env.NEXT_PUBLIC_IMAGE_SERVER_URL}/${featuredFactoid.cover_image}` : "/placeholder.svg"} 
         title={featuredFactoid?.parsed?.publication_info?.catchy_title || featuredFactoid.claim} 
-        description={featuredFactoid.evaluation} handleReportClick={handleReportClick} />
+        description={featuredFactoid.evaluation} onClick={() => handleReportClick(featuredFactoid)} />
       )}
     
 
@@ -134,9 +134,9 @@ export function HomeScreen() {
 
       {isModalOpen && selectedFactoid && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-gray-800 rounded-lg w-full max-w-4xl max-h-full overflow-auto">
+          <div className="bg-gray-800 rounded-lg w-full max-w-4xl h-full max-h-full overflow-auto">
             <div className="flex justify-between items-center p-4 border-b border-gray-700">
-              <h2 className="text-xl font-medium text-gray-100">Original Query: {selectedFactoid.claim}</h2>
+              <h2 className="text-lg text-gray-100 line-clamp-2">Original Query: {selectedFactoid.claim}</h2>
               <button onClick={closeModal} className="text-gray-400 hover:text-gray-200">
                 ✕
               </button>

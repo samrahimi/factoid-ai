@@ -56,11 +56,12 @@ export default function MyReportsPage() {
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
                 {reports.map((factoid) => (
                   <div onClick={() => handleReportClick(factoid)} key={factoid.id} className="rounded-lg overflow-hidden">
+                   {factoid.cover_image && (
                     <img
                       src={factoid.cover_image ? `${process.env.NEXT_PUBLIC_IMAGE_SERVER_URL}/${factoid.cover_image}` : "/placeholder.svg"}
                       alt={factoid.claim}
                       className="aspect-[3/2] object-cover"
-                    />
+                    />)}
                     <div className="p-4 bg-background">
                       <h3 className="line-clamp-2 xl:line-clamp-1 text-lg font-semibold">
                         {factoid?.parsed?.publication_info?.catchy_title || factoid.claim}
@@ -77,7 +78,7 @@ export default function MyReportsPage() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-4xl max-h-full overflow-auto">
             <div className="flex justify-between items-center p-4 border-b border-gray-700">
-              <h2 className="text-xl font-medium text-gray-100">Original Query: {selectedReport.claim}</h2>
+              <h2 className="line-clamp-2 xl:line-clamp-1 text-l font-medium text-gray-100">Original Query: {selectedReport.claim?.split('[')[0]}</h2>
               <button
                 onClick={closeModal}
                 className="text-gray-400 hover:text-gray-200"

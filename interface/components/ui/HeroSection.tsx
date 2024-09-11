@@ -4,12 +4,13 @@ interface FeaturedSectionProps {
   imageUrl: string;
   title: string;
   description: string;
+  onClick: () => void;
 }
 
-const HeroSection: React.FC<FeaturedSectionProps> = ({ imageUrl, title, description }) => {
+const HeroSection: React.FC<FeaturedSectionProps> = ({ imageUrl, title, description, onClick }) => {
   return (
     <section className="w-full px-4 py-6 sm:py-9 md:py-12 lg:py-16 xl:py-32">
-      <div className="container grid grid-cols-1 gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
+      <div onClick={(e) => {onClick()}} className="cursor-pointer container grid grid-cols-1 gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
         <img
           src={imageUrl || "/placeholder.svg"}
           alt="Featured"
