@@ -1,10 +1,11 @@
+import { useRouter } from 'next/navigation'
 import React from 'react';
 
 const RelatedClaims = ({ data }) => {
   const { suggested_queries } = data;
-
+  const router = useRouter()
   const handleClaimClick = (claim) => {
-    window.location.href=`/fact-check?claim=${encodeURIComponent(claim)}`
+    router.push(`/fact-check?claim=${encodeURIComponent(claim)}`)
   };
 
   return (

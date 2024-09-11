@@ -39,8 +39,8 @@ export function Navigation() {
                   </Link>
               </nav>
 
-              <div className="fixed w-full bottom-8 z-20 flex items-center gap-4">
-                <MyAccountDropdown  />
+              <div className="fixed l-8 bottom-8 z-20 flex items-center gap-4">
+                <MyAccountDropdown isSideMenu={true} />
 
               </div>
             </SheetContent>
@@ -58,7 +58,7 @@ export function Navigation() {
           </nav>
         </div>
         <div className="hidden md:flex items-end gap-4">
-          <MyAccountDropdown />
+          <MyAccountDropdown isSideMenu={false} />
         </div>
 
       </header>

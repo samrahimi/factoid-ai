@@ -6,34 +6,49 @@ import { supabase } from '../lib/supabaseClient';
 import Link from 'next/link';
 import {Navigation} from '@/components/Navigation';
 import { MyAccountDropdown } from '@/components/MyAccountDropdown';
+
+//there's gotta be a better way to do this
+const requireLogin=() =>{
+  
+  if (location.href.toLowerCase().includes("fact-check") ||
+    location.href.toLowerCase().includes("edit-profile") ||
+    location.href.toLowerCase().includes("playground")
+) {
+  return true
+  } else {return false}
+}
 export default function LayoutWrapperCodeOnly({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   //const [loggedInUser, setLoggedInUser] = useState({})
   useEffect(() => {
     const checkAuth = async () => {
+      setIsLoading(true)
       const { data: { session } } = await supabase.auth.getSession();
       
-      if (!session && pathname !== '/auth') {
+      if (!session && requireLogin()) {
         router.push('/auth');
       } else if (session && pathname === '/auth') {
-        router.push('/');
+        router.push('/'); //TODO: send them to wherever they were trying to go before they got made to login
       } 
     
       setIsLoading(false);
     };
 
-    checkAuth();
+    if (requireLogin()) 
+      checkAuth();
+    else 
+      return
 
     const { data: authListener } = supabase.auth.onAuthStateChange(async(event, session) => {
-      if (event === 'SIGNED_OUT' && pathname !== '/auth') {
+      if (event === 'SIGNED_OUT' && requireLogin()) {
         router.push('/auth');
       } else if (event === 'SIGNED_IN' && pathname === '/auth') {
         console.log(JSON.stringify(await supabase.auth.getUser()))
         router.push('/');
       }
-    });
+    }); 
 
     return () => {
       if (authListener && authListener.subscription) {

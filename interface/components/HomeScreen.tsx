@@ -38,6 +38,7 @@ import Factoid from "./Factoid"
 import HeroSection from "./ui/HeroSection"
 import { ArticleHeader } from "./ArticleHeader"
 import { get } from "http"
+import { useRouter } from "next/navigation"
 
 export function HomeScreen() {
   const [featuredFactoid, setFeaturedFactoid] = useState(null)
@@ -46,8 +47,7 @@ export function HomeScreen() {
   const [selectedFactoid, setSelectedFactoid] = useState<Report | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taggedFactoids, setTaggedFactoids] = useState([]);
-  
-
+  const router = useRouter();
   const handleReportClick = async(report: Report) => {
     const populatedReport = {...report, author: await getPublicAuthorProfile(report)}
     setSelectedFactoid(populatedReport);
@@ -120,10 +120,10 @@ export function HomeScreen() {
 
       <div className="fixed bottom-4 right-4 z-50">
         <TooltipProvider>
-          <Tooltip>
+          <Tooltip defaultOpen={true}>
             <TooltipTrigger asChild>
-              <Button onClick={(e) => (location.href = "/fact-check")} size="icon" className="rounded-full bg-primary text-primary-foreground">
-                <WandSparklesIcon className="h-6 w-6" />
+              <Button onClick={(e) => (router.push("/fact-check"))} size="icon" className="rounded-full bg-primary text-primary-foreground">
+                <WandSparklesIcon className="h-10 w-10" />
                 <span className="sr-only">Ask a question or debunk a myth</span>
               </Button>
             </TooltipTrigger>

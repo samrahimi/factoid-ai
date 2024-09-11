@@ -303,7 +303,7 @@ export enum Factuality {
   UNKNOWN = 'INCONCLUSIVE',
   TRUE = 'TRUE',
   FALSE = 'FALSE',
-  MIXED = 'MIXED',
+  MIXED = 'MIXTURE',
   MOSTLY_TRUE = 'MOSTLY TRUE',
   MOSTLY_FALSE = 'MOSTLY FALSE',
 }

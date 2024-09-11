@@ -55,7 +55,7 @@ const getCurrentUser = async () => {
         return user
     };
 async function getUserProfile(uid, idempotent=false) {
-    alert(uid)
+    //alert(uid)
     console.log('Fetching user profile for user:', uid);
     // Fetch the profile for the current user
     const { data: profile, error: profileError } = await supabase
@@ -69,7 +69,7 @@ async function getUserProfile(uid, idempotent=false) {
     }
     if (!profile.username) {
         profile.username = "User-"+Math.random().toString(36).substring(7);
-        profile.full_name = "Anonymous"
+        profile.full_name = "Anonymous Contributor"
         if (!idempotent)
             await updateUserProfile(profile)
         return profile;

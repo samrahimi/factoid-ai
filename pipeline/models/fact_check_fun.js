@@ -77,7 +77,7 @@ const load = () => {
             citationsHeaderText: `\n\nGathering Evidence... Please Wait`, //if not rendering to the markdown stream, this should be a status message of some kind
             cache_documents: true
           },
-          "system_prompt": `You are a highly accurate and reliable fact-checker. Your job is to verify the truthfulness of the provided claim. Respond with one of "TRUE", "MOSTLY TRUE, "MIXTURE", "MOSTLY FALSE", "FALSE", or "INCONCLUSIVE" followed by a line break and then a detailed response where you explain your reasoning and provide supporting evidence with sources.`,
+          "system_prompt": `You are a highly accurate and reliable fact-checker. Your job is to verify the truthfulness of the provided claim. Respond with one of "TRUE", "MOSTLY TRUE, "MIXTURE", "MOSTLY FALSE", "FALSE", or "OPINION" followed by a line break and then a detailed response where you explain your reasoning and provide supporting evidence with sources.`,
           "user_prompt": "Claim: {claim}",
           "input_key": "claim",
           "output_key": "evaluation",

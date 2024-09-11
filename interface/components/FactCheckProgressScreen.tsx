@@ -9,7 +9,7 @@ const FactCheckProgressScreen = ({ onCancel, outputStream, onComplete, step, pro
    <div className="flex flex-col h-screen">
      {/* Fixed Header */}
      <div className="fixed top-16 left-0 right-0 bg-gray-900 px-4 py-0 sm:px-6 lg:px-8 z-10">
-       <h2 className="text-xl font-semibold mb-4 text-purple-300">Fact Check in Progress</h2>
+
        <div className="mb-0">
          <div className="relative pt-1">
            <div className="flex mb-2 items-center justify-between">

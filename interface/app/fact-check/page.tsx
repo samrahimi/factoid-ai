@@ -157,11 +157,11 @@ const App = () => {
   const renderScreen = () => {
     switch (currentScreen) {
       case 'home':
-        return <HomeScreen onSubmit={handleSubmit} />;
+        return <FactCheckForm onSubmit={handleSubmit} />;
       case 'progress':
         return <FactCheckProgressScreen step={step} progress={progress} status={isLoading} outputStream={output} onCancel={handleCancel} onComplete={handleFactCheckComplete} />;
       default:
-        return <HomeScreen onSubmit={handleSubmit} />;
+        return <FactCheckForm onSubmit={handleSubmit} />;
     }
   };
 
@@ -170,12 +170,14 @@ const App = () => {
   );
 };
 
-const HomeScreen = ({onSubmit}) => {
-  const [text, setText] = useState(location.href.indexOf('?claim=') > 0 ? 
-  decodeURIComponent(location.href.split('?claim=')[1]):
-  ``);
+const FactCheckForm = ({onSubmit}) => {
+  const [text, setText] = useState('');
   const [url, setUrl] = useState('');
 
+  useEffect(() => {
+    const prepopulatedText = window.location.href.split('?claim=')[1] ? decodeURIComponent(window.location.href.split('?claim=')[1]) : ''
+    setText(prepopulatedText)
+  }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form submit - in HomeScreen")
@@ -185,10 +187,10 @@ const HomeScreen = ({onSubmit}) => {
 
   return (
       <div className="container mx-auto px-4 py-6 sm:px-0">
-        <h2 className="text-xl font-semibold mb-4 text-gray-100">Welcome to AI Fact Checker</h2>
-        <p className="mb-6 text-gray-300">Upload a document, paste text, or enter a URL to start fact-checking.</p>
+        <h2 className="text-xl mt-80 font-semibold mb-4 text-gray-100">Welcome to AI Fact Checker</h2>
+        <p className="mb-6  text-gray-300">To start fact checking, enter the fact you want to check in the box below, and hit the button. Note: please do not navigate away or close your browser until the fact checking is done (usually 3-5 minutes). Thanks!</p>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
+          <div className='hidden'>
             <label htmlFor="file-upload" className="block text-sm font-medium text-gray-300 mb-2">
               Upload Document
             </label>
@@ -235,7 +237,7 @@ const HomeScreen = ({onSubmit}) => {
                 type="text"
                 name="url-input"
                 id="url-input"
-                className="focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-600 bg-gray-700 text-gray-100"
+                className="focus:ring-teal-500 focus:border-teal-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-600 bg-gray-700 text-gray-100"
                 placeholder="https://example.com"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
@@ -245,7 +247,7 @@ const HomeScreen = ({onSubmit}) => {
           <div>
             <button
               type="submit"
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
             >
               Submit for Fact Checking
             </button>
