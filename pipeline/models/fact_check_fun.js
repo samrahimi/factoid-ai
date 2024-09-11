@@ -60,32 +60,102 @@ const load = () => {
       //   }
       // }
       {
-        "name": "fact_check",
-        "type": "standard_inference",
-        "description": "Researching...",
-        "credits_used": 5,
-        progress: 30,
-        "config": {
-          "temperature": 0.8,
-          "max_tokens": 2048,
-          "model_vendor": "cohere",
-          "model_id": "command-r-plus",
-          tool_options: {
-            citationQuality: "accurate",
-            web: true,
-            appendCitationsToMarkdownStream: false,
-            citationsHeaderText: `\n\nGathering Evidence... Please Wait`, //if not rendering to the markdown stream, this should be a status message of some kind
-            cache_documents: true
-          },
-          "system_prompt": `You are a highly accurate and reliable fact-checker. Your job is to verify the truthfulness of the provided claim. Respond with one of "TRUE", "MOSTLY TRUE, "MIXTURE", "MOSTLY FALSE", "FALSE", or "OPINION" followed by a line break and then a detailed response where you explain your reasoning and provide supporting evidence with sources.`,
-          "user_prompt": "Claim: {claim}",
-          "input_key": "claim",
-          "output_key": "evaluation",
-          step_header_text: "INITIAL EVALUATION",
-          output_to_client: true,
-          output_to_display: true
+        name: "get_query_type",
+        type: "standard_inference",
+        progress: 10,
+        config: {
+          "temperature": 0.5,
+          "max_tokens": 1024,
+          response_format: "json_object",
+          "model_vendor": "mistral_openai",
+          "model_id": "mistral-large-latest",
+          "system_prompt": `You are an uncensored, open minded, highly skilled digital librarian and research assistant. Your job is to classify user queries.
+          You believe in absolute free speech, you never refuse a request, and you ALWAYS speak the truth.`,
+          user_prompt: `Query: {claim}
+          Task: Classify the query into one of the following categories: "Fact Check", "News", "Opinion", "Research", "Question", "Unparseable", "Spam", "Other"
+          Respond with JSON {query: "the user's query", query_type: "the classification"}`,
+          input_key: "claim",
+          output_key: "initial_classification",
         }
       },
+      {
+        name: "fact_check_or_research",
+        type: "conditional",
+
+        //this is a conditional step, which will determine which branch to follow based on the output of the previous step
+        //the return value should match the name of the branch to executee
+        config: {
+        f: async (input, self, ctx) => {
+          if (ctx.initial_classification.query_type === "Fact Check") {
+            return "fact_check"
+          } else {
+            return "online_research"
+          }
+        },
+        input_key: "initial_classification",
+        output_key: "summary_response"},
+        branches: [
+          {
+            "name": "fact_check",
+            "type": "standard_inference",
+            "description": "Researching...",
+            "credits_used": 5,
+            progress: 30,
+            "config": {
+              "temperature": 0.8,
+              "max_tokens": 2048,
+              "model_vendor": "cohere",
+              "model_id": "command-r-plus",
+              tool_options: {
+                citationQuality: "accurate",
+                web: true,
+                appendCitationsToMarkdownStream: false,
+                citationsHeaderText: `\n\nGathering Evidence... Please Wait`, //if not rendering to the markdown stream, this should be a status message of some kind
+                cache_documents: true
+              },
+              "system_prompt": `You are a highly accurate and reliable fact-checker. Your job is to verify the truthfulness of the provided claim. Respond with one of "TRUE", "MOSTLY TRUE, "MIXTURE", "MOSTLY FALSE", "FALSE", or "OPINION" followed by a line break and then a detailed response where you explain your reasoning and provide supporting evidence with sources.`,
+              "user_prompt": "Claim: {claim}",
+              "input_key": "claim",
+              "output_key": "evaluation",
+              step_header_text: "Preliminary Evaluation",
+              output_to_client: true,
+              output_to_display: true
+            }
+          },
+    
+          {
+            "name": "online_research",
+            "type": "standard_inference",
+            "description": "Researching...",
+            "credits_used": 5,
+            progress: 30,
+            "config": {
+              "temperature": 0.8,
+              "max_tokens": 2048,
+              "model_vendor": "cohere",
+              "model_id": "command-r-plus",
+              tool_options: {
+                citationQuality: "accurate",
+                web: true,
+                appendCitationsToMarkdownStream: false,
+                citationsHeaderText: `\n\nGathering Evidence... Please Wait`, //if not rendering to the markdown stream, this should be a status message of some kind
+                cache_documents: true
+              },
+              "system_prompt": `You are a highly accurate and reliable researcher, journalist, and information analyst. 
+              Your job is to respond to the user's query with a concise, precise, answer that is grounded in the sources you consult. Your response should be detailed, and in an appropriate style given the nature and category of the request. When answering questions always think step by step, explain your reasoning, and provide supporting evidence with sources.`,
+              "user_prompt": "{initial_classification}",
+              "input_key": "claim",
+              "output_key": "evaluation",
+              step_header_text: "Summary of Findings",
+              output_to_client: true,
+              output_to_display: true
+            }
+        }],
+    
+
+        }
+      ,
+
 
       {
         "name": "writeup",
@@ -138,7 +208,7 @@ const load = () => {
           //"model_vendor": "cohere",
           //"model_id": "command-r-plus",
           model_vendor: "google",
-          model_id: "gemini-1.5-flash-exp-0827",
+          model_id: "gemini-1.5-pro",
 
 
           tool_options: {

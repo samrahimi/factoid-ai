@@ -95,6 +95,11 @@ async function runPipeline(configPath, userRequest, sessionId, customProjectId, 
 
     //console.log(`Executing step: ${step.name || "undef"}`)
     switch (step.type) {
+      case 'conditional':
+        await executeConditionalStep(step, projectDir);
+        logContext()
+        break
+
       case 'tool': 
         await runTool(step, projectDir)
         logContext()
@@ -142,6 +147,26 @@ async function runPipeline(configPath, userRequest, sessionId, customProjectId, 
   //console.log('\n--- Pipeline execution completed ---');
   return context;
 }
+
+async function executeConditionalStep(step, projectDir) {
+  try {
+    const evaluator = step.config.f
+    const branch_name = await evaluator(context[step.config.input_key], step, context)
+    console.log('[system] invoking '+branch_name)
+    const branch = step.branches.find(b => b.name == branch_name)
+    switch (branch.type) {
+      case 'standard_inference':
+        const output = await executeStandardInference(branch, projectDir);
+        
+        // Update the context with the result
+        // not always necessary because the output is already in the context
+        if (step.config.output_key)
+          context[step.config.output_key] = output
+        break;
+      } 
+  } catch(ex) {console.log("[fatal] "+ex.message)}
+}
+
 async function executeFinalizer(step, projectDir) {
   /*         {
           name: "done",

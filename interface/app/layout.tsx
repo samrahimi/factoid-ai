@@ -7,8 +7,8 @@ import LayoutWrapperCodeOnly from './LayoutWrapperCodeOnly';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Factoid - Fact Checking, Research, and Journalism",
-  description: "Uses search-enabled LLMs to check facts professionally and at scale",
+  title: "DeFact - Fact Checking, Research, and Journalism at Scale",
+  description: "Our state of the art, massive Mixture-of-Experts, internet-connected AI model can perform research of all sorts and check facts professionally and at scale. It is also capable of performing human-quality journalism and scholarly research.",
 };
 
 export default function RootLayout({
