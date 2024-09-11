@@ -157,7 +157,13 @@ async function executeConditionalStep(step, projectDir) {
     switch (branch.type) {
       case 'standard_inference':
         const output = await executeStandardInference(branch, projectDir);
-        
+            //if the step has an output key, and is set to output to the client, we send the result back to the client
+        if (branch.config.output_to_client && branch.config.output_key) {
+          clientContext[branch.config.output_key] = context[branch.config.output_key]
+          sendControlMessage("update_results",clientContext)
+          //sendControlMessage("update_results",context)
+        }
+
         // Update the context with the result
         // not always necessary because the output is already in the context
         if (step.config.output_key)

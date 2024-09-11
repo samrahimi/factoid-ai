@@ -49,3 +49,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+pipeline/arx/config.json
+pipeline/arx/llm.py
+pipeline/arx/main.py
+pipeline/arx/requirements.txt
+pipeline/arx/search.py
+pipeline/arx/__pycache__/llm.cpython-311.pyc
+pipeline/arx/__pycache__/search.cpython-311.pyc
