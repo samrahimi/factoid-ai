@@ -1,3 +1,16 @@
+# About This Repo
+
+This repo contains two projects: an agentic pipeline with declarative workflow engine, and a web application that lets users check facts and write properly researched journalistic content using a pipeline with no less than 6 different LLMs... 
+
+Right now I can't recommend that you use any of this in your applications because of hard coded URLs, poor documentation, and extreme overuse of Javascript's dynamic typing making it very hard to use the code if you didn't write it yourself. 
+
+There is major refactoring needed - specifically the pipeline engine, and its interfaces (a CLI and a REST API) need to go into their own project / repository, and the webapp (which is a usecase for the pipeline) needs to have its own repo, and then we need to completely rewrite the logic for streaming output to the UI during generation, and progressively updating a database record as each new section (which maps to a db column) is output for an article currently in progress.
+
+Just to explain why things got so hacky: in a normal chatgpt-like solution, you just insert to the database *after* each inference request is completed. If the request fails halfway, well then, the user can copy paste the partial output from their screen if they care to save it, otherwise its gone forever. But the fact checking / journalist pipeline (models/fact_check_fun.js) contains about 10 steps, can take up to 5 minutes to complete, and it is the opposite of transactional: frequently one or more steps will fail, but its a pretty robust and redundant architecture and often excellent results are produced with only 7 out of 10 pipeline stages having completed... Anyways its a nightmare and if you wanna help with this I would be eternally grateful.
+
+
+
+
 # Pipeline Documentation
 
 ## 1. Pipeline Structure
